@@ -67,7 +67,9 @@ void draw() {
   PGraphics pg = layers.get("MAIN");
   pg.beginDraw();
   pg.background(200);
-  pg.rect(50, 50, 100, 50 * sin(frameCount / 100f));
+  for(int n = 0; n < 9999; n++) {
+    pg.rect(random(WIDTH), random(HEIGHT), randomGaussian(), 50 * sin(frameCount / 100f));
+  }
   pg.endDraw();
   
   
@@ -75,6 +77,11 @@ void draw() {
   pg.beginDraw();
   pg.fill(128);
   pg.rect(50, 50, 100, 50 * sin(frameRate));
+  pg.fill(255);
+  pg.stroke(255);
+  pg.textSize(72);
+  pg.textAlign(LEFT, TOP);
+  pg.text("FPS" + frameRate, 0, 0);
   pg.endDraw();
   
   Draw();
