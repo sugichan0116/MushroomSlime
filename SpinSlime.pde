@@ -127,12 +127,12 @@ void draw() {
   for(int n = 0; n < 4; n++) {
     //pg.tint(42 + 255 / 4 * n, 168, 255);
     PImage[] tiles = (icons.get("SLIME"));
-    int velo = 2;
+    float velo = 2.0, size = tiles[0].width, frame = tiles.length;
     pg.tint(colors[n]);
-    int x = int((frameCount * tiles[0].width / tiles.length / velo
-      + tiles[0].width / 8 * sin(frameCount / tiles.length / velo * TAU))
+    int x = int((frameCount * size / frame / velo
+      + size / 8.0 * sin(frameCount / frame / velo * TAU))
       * (float(n) / 4.0 + 1.0));
-    pg.image(tiles[(3 + frameCount / velo) % tiles.length],
+    pg.image(tiles[(3 + frameCount / int(velo)) % tiles.length],
       mod(x, WIDTH),
       160 + (icons.get("SLIME"))[0].height * n);
   }
