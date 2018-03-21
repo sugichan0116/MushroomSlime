@@ -22,7 +22,7 @@ int HEIGHT;
 
 /* materials */
 //icon配列
-Map<String, PImage> icons;
+Map<String, PImage[]> icons;
 //layer
 Map<String, PGraphics> layers;
 Map<String, Float> layerDepth;
@@ -32,9 +32,12 @@ Minim minim;
 Map<String, AudioPlayer> sounds;
 
 void setup() {
-  size(720, 480, P2D);
+  size(960, 540, P2D);
   WIDTH = width;
   HEIGHT = height;
+  
+  icons = new HashMap<String, PImage[]>();
+  icons.put("SLIME", sliceImage("slime.png", 32, 32));
   
   layers = new HashMap<String, PGraphics>();
   layerDepth = new HashMap<String, Float>();
@@ -44,6 +47,20 @@ void setup() {
   layerDepth.put("BACK", 1.);
   layers.put("MAIN", createGraphics(WIDTH, HEIGHT));
   layerDepth.put("MAIN", .0);
+}
+
+PImage[] sliceImage(String name, int widthSize, int heightSize) {
+  PImage image = loadImage(name);
+  int[] size = {(image.width / widthSize), (image.height / heightSize)}; 
+  PImage[] tiles = new PImage[size[0] * size[1]];
+  
+  for(int n = 0; n < size[0]; n++) {
+    for(int m = 0; m < size[1]; m++) {
+      tiles[n + m * size[0]] = image.get(n * widthSize, m * heightSize, widthSize, widthSize);
+    }
+  }
+  
+  return tiles;
 }
 
 List<Entry<String, Float>> sortLayers(Map<String, Float> layerDepth) {
@@ -68,8 +85,11 @@ void draw() {
   PGraphics pg = layers.get("MAIN");
   pg.beginDraw();
   pg.background(200);
-  for(int n = 0; n < 9999; n++) {
-    pg.rect(random(WIDTH), random(HEIGHT), randomGaussian(), 50 * sin(frameCount / 100f));
+  pg.image((icons.get("SLIME"))[(frameCount / 4) % 9], 100, 100);
+  int n = 0;
+  for(PImage i : (icons.get("SLIME"))) {
+    pg.image(i, 200, 100 + i.height * n);
+    n++;
   }
   pg.endDraw();
   
