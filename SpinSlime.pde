@@ -39,7 +39,7 @@ void setup() {
   frameRate(30f);
   
   icons = new HashMap<String, PImage[]>();
-  icons.put("SLIME", sliceImage("slime2.png", 32, 32, -1, 1));
+  icons.put("SLIME", sliceImage("slime2.png", 32, 32, 1, 1));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
   
   layers = new HashMap<String, PGraphics>();
@@ -127,7 +127,10 @@ void draw() {
   for(int n = 0; n < 4; n++) {
     //pg.tint(42 + 255 / 4 * n, 168, 255);
     pg.tint(colors[n]);
-    pg.image((icons.get("SLIME"))[(frameCount / 2) % 9], 100, 160 + (icons.get("SLIME"))[0].height * n);
+    int x = int((frameCount * 32.0 / 18.0 + 4.0 * sin(frameCount / 18.0 * TAU)) * (n + 1));
+    pg.image((icons.get("SLIME"))[(3 + frameCount / 2) % 9],
+      mod(x, WIDTH),
+      160 + (icons.get("SLIME"))[0].height * n);
   }
   pg.noTint();
   int n = 0;
