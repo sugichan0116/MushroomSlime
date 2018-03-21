@@ -121,11 +121,13 @@ void draw() {
   PGraphics pg = layers.get("MAIN");
   pg.beginDraw();
   pg.background(200);
-  pg.colorMode(HSB);
+  //pg.colorMode(HSB);
   pg.imageMode(CENTER);
+  color[] colors = {#FEFF0A, #6AE349, #4DFBFF, #FF924D};
   for(int n = 0; n < 4; n++) {
-    pg.tint(42 + 255 / 4 * n, 168, 255);
-    pg.image((icons.get("SLIME"))[(frameCount / 2) % 9], 100, 60 + (icons.get("SLIME"))[0].height * n);
+    //pg.tint(42 + 255 / 4 * n, 168, 255);
+    pg.tint(colors[n]);
+    pg.image((icons.get("SLIME"))[(frameCount / 2) % 9], 100, 160 + (icons.get("SLIME"))[0].height * n);
   }
   pg.noTint();
   int n = 0;
