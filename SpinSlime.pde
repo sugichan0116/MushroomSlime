@@ -36,8 +36,11 @@ void setup() {
   WIDTH = width;
   HEIGHT = height;
   
+  frameRate(30f);
+  
   icons = new HashMap<String, PImage[]>();
-  icons.put("SLIME", sliceImage("slime.png", 32, 32));
+  icons.put("SLIME", sliceImage("slime2.png", 32, 32, 2, 2));
+  icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
   
   layers = new HashMap<String, PGraphics>();
   layerDepth = new HashMap<String, Float>();
@@ -63,6 +66,33 @@ PImage[] sliceImage(String name, int widthSize, int heightSize) {
   return tiles;
 }
 
+PImage[] sliceImage(String name, int widthSize, int heightSize, int widthRate, int heightRate) {
+  return resizeImages(sliceImage(name, widthSize, heightSize), widthRate, heightRate);
+}
+
+PImage[] resizeImages(PImage[] images, int widthRate, int heightRate) {
+  for(int n = 0; n < images.length; n++) {
+    //* choose rendering type
+    //images[n].resize(int(images[n].width * widthRate), int(images[n].height * heightRate));
+    images[n] = resizeImage(images[n], widthRate, heightRate);
+  }
+  return images;
+}
+
+PImage resizeImage(PImage image, int widthRate, int heightRate) {
+  PImage tile = createImage(image.width * widthRate, image.height * heightRate, ARGB);
+  for(int x = 0; x < image.width; x++) {
+    for(int y = 0; y < image.height; y++) {
+      for(int w = 0; w < widthRate; w++) {
+        for(int h = 0; h < heightRate; h++) {
+          tile.pixels[(x * widthRate + w) + (y * heightRate + h) * tile.width] = image.pixels[x + y * image.width];
+        }
+      }
+    }
+  }
+  return tile;
+}
+
 List<Entry<String, Float>> sortLayers(Map<String, Float> layerDepth) {
     List<Entry<String, Float>> list = new ArrayList<Entry<String, Float>>(layerDepth.entrySet());
     Collections.sort(list, new Comparator<Entry<String, Float>>() {
@@ -85,7 +115,12 @@ void draw() {
   PGraphics pg = layers.get("MAIN");
   pg.beginDraw();
   pg.background(200);
-  pg.image((icons.get("SLIME"))[(frameCount / 4) % 9], 100, 100);
+  pg.colorMode(HSB);
+  for(int n = 0; n < 4; n++) {
+    pg.tint(42 + 255 / 4 * n, 196, 255);
+    pg.image((icons.get("SLIME"))[(frameCount / 2) % 9], 100, 60 + (icons.get("SLIME"))[0].height * n);
+  }
+  pg.noTint();
   int n = 0;
   for(PImage i : (icons.get("SLIME"))) {
     pg.image(i, 200, 100 + i.height * n);
@@ -100,9 +135,12 @@ void draw() {
   pg.rect(50, 50, 100, 50 * sin(frameRate));
   pg.fill(255);
   pg.stroke(255);
-  pg.textSize(72);
+  pg.textSize(24);
   pg.textAlign(LEFT, TOP);
-  pg.text("FPS" + min(float(width) / float(WIDTH), float(height) / float(HEIGHT)), 0, 0);
+  pg.text("FPS" + frameRate + "\n" +
+    "ScreenRate" + min(float(width) / float(WIDTH), float(height) / float(HEIGHT)) + "\n" +
+    "mouseX" + mouseX
+    , 0, 0);
   pg.endDraw();
   
   Draw();
