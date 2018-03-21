@@ -39,7 +39,7 @@ void setup() {
   frameRate(30f);
   
   icons = new HashMap<String, PImage[]>();
-  icons.put("SLIME", sliceImage("slime2.png", 32, 32, 2, 2));
+  icons.put("SLIME", sliceImage("slime2.png", 32, 32, -1, 1));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
   
   layers = new HashMap<String, PGraphics>();
@@ -80,17 +80,23 @@ PImage[] resizeImages(PImage[] images, int widthRate, int heightRate) {
 }
 
 PImage resizeImage(PImage image, int widthRate, int heightRate) {
-  PImage tile = createImage(image.width * widthRate, image.height * heightRate, ARGB);
+  if(widthRate * heightRate == 0) return image;
+  PImage tile = createImage(image.width * abs(widthRate), image.height * abs(heightRate), ARGB);
   for(int x = 0; x < image.width; x++) {
     for(int y = 0; y < image.height; y++) {
-      for(int w = 0; w < widthRate; w++) {
-        for(int h = 0; h < heightRate; h++) {
-          tile.pixels[(x * widthRate + w) + (y * heightRate + h) * tile.width] = image.pixels[x + y * image.width];
+      for(int w = 0; w < abs(widthRate); w++) {
+        for(int h = 0; h < abs(heightRate); h++) {
+          tile.pixels[mod(x * widthRate + w, tile.width) + mod(y * heightRate + h, tile.height) * tile.width] =
+            image.pixels[x + y * image.width];
         }
       }
     }
   }
   return tile;
+}
+
+int mod(int a, int b) {
+  return (a % b < 0) ? (a % b + b) : (a % b);
 }
 
 List<Entry<String, Float>> sortLayers(Map<String, Float> layerDepth) {
@@ -116,8 +122,9 @@ void draw() {
   pg.beginDraw();
   pg.background(200);
   pg.colorMode(HSB);
+  pg.imageMode(CENTER);
   for(int n = 0; n < 4; n++) {
-    pg.tint(42 + 255 / 4 * n, 196, 255);
+    pg.tint(42 + 255 / 4 * n, 168, 255);
     pg.image((icons.get("SLIME"))[(frameCount / 2) % 9], 100, 60 + (icons.get("SLIME"))[0].height * n);
   }
   pg.noTint();
