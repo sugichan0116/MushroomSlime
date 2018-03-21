@@ -17,8 +17,8 @@ import java.awt.event.ComponentEvent;
 //オブジェクト管理
 
 /* system */
-int WIDTH = 480;
-int HEIGHT = 360;
+int WIDTH;
+int HEIGHT;
 
 /* materials */
 //icon配列
@@ -32,8 +32,9 @@ Minim minim;
 Map<String, AudioPlayer> sounds;
 
 void setup() {
-  size(480, 360, P2D);
-  
+  size(720, 480, P2D);
+  WIDTH = width;
+  HEIGHT = height;
   
   layers = new HashMap<String, PGraphics>();
   layerDepth = new HashMap<String, Float>();
@@ -81,7 +82,7 @@ void draw() {
   pg.stroke(255);
   pg.textSize(72);
   pg.textAlign(LEFT, TOP);
-  pg.text("FPS" + frameRate, 0, 0);
+  pg.text("FPS" + min(float(width) / float(WIDTH), float(height) / float(HEIGHT)), 0, 0);
   pg.endDraw();
   
   Draw();
@@ -89,7 +90,7 @@ void draw() {
 }
 
 void Draw() {
-  float screenRate = max(width / WIDTH, height / HEIGHT);
+  float screenRate = min(float(width) / float(WIDTH), float(height) / float(HEIGHT));
   
   pushMatrix();
   translate(width / 2f, height / 2f);
