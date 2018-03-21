@@ -126,9 +126,13 @@ void draw() {
   color[] colors = {#FEFF0A, #6AE349, #4DFBFF, #FF924D};
   for(int n = 0; n < 4; n++) {
     //pg.tint(42 + 255 / 4 * n, 168, 255);
+    PImage[] tiles = (icons.get("SLIME"));
+    int velo = 2;
     pg.tint(colors[n]);
-    int x = int((frameCount * 32.0 / 18.0 + 4.0 * sin(frameCount / 18.0 * TAU)) * (float(n) / 4.0 + 1.0));
-    pg.image((icons.get("SLIME"))[(3 + frameCount / 2) % 9],
+    int x = int((frameCount * tiles[0].width / tiles.length / velo
+      + tiles[0].width / 8 * sin(frameCount / tiles.length / velo * TAU))
+      * (float(n) / 4.0 + 1.0));
+    pg.image(tiles[(3 + frameCount / velo) % tiles.length],
       mod(x, WIDTH),
       160 + (icons.get("SLIME"))[0].height * n);
   }
