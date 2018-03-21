@@ -39,7 +39,7 @@ void setup() {
   frameRate(30f);
   
   icons = new HashMap<String, PImage[]>();
-  icons.put("SLIME", sliceImage("slime2.png", 32, 32, 1, 1));
+  icons.put("SLIME", sliceImage("slime2.png", 32, 32, 2, 2));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
   
   layers = new HashMap<String, PGraphics>();
