@@ -49,6 +49,7 @@ void setup() {
   icons.put("SLIME_DOWN", sliceImage("slime_b.png", 32, 32, 2, 2));
   icons.put("SLIME_UP", sliceImage("slime_a.png", 32, 32, 2, 2));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
+  icons.put("FOREST", sliceImage("forest.png"));
   
   layers = new HashMap<String, PGraphics>();
   layerDepth = new HashMap<String, Float>();

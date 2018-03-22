@@ -1,8 +1,20 @@
 
+PImage[] sliceImage(String name) {
+  return sliceImage()
+}
+
 PImage[] sliceImage(String name, int widthSize, int heightSize) {
   PImage image = loadImage(name);
+  PImage[] tiles;
+  
+  if(widthSize <= 0 || heightSize <= 0) {
+    tiles = new PImage[1];
+    tiles[0] = image;
+    return tiles;
+  }
+  
   int[] size = {(image.width / widthSize), (image.height / heightSize)}; 
-  PImage[] tiles = new PImage[size[0] * size[1]];
+  tiles = new PImage[size[0] * size[1]];
   
   for(int n = 0; n < size[0]; n++) {
     for(int m = 0; m < size[1]; m++) {
