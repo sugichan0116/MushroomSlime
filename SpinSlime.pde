@@ -47,7 +47,7 @@ void setup() {
   icons.put("SLIME_RIGHT", sliceImage("slime2.png", 32, 32, 2, 2));
   icons.put("SLIME_LEFT", sliceImage("slime2.png", 32, 32, -2, 2));
   icons.put("SLIME_DOWN", sliceImage("slime_b.png", 32, 32, 2, 2));
-  icons.put("SLIME_UP", sliceImage("slime_b.png", 32, 32, 2, -2));
+  icons.put("SLIME_UP", sliceImage("slime_a.png", 32, 32, 2, 2));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
   
   layers = new HashMap<String, PGraphics>();

@@ -80,7 +80,7 @@ void DrawLayers() {
   popMatrix();
 }
 
-boolean checkKeyPressed(String code) {
+boolean isKeyPressed(String code) {
   /*
   println("*" + UP + ", " + DOWN + ", " + RIGHT + ", " + LEFT + " ;" + keyCode);
   if(keyPressed) {
@@ -96,6 +96,7 @@ boolean checkKeyPressed(String code) {
   if(code == "DOWN") return keyState.getState(DOWN);
   if(code == "RIGHT") return keyState.getState(RIGHT);
   if(code == "LEFT") return keyState.getState(LEFT);
+  if(code == "ARROW") return keyState.getState(UP) | keyState.getState(DOWN) | keyState.getState(RIGHT) | keyState.getState(LEFT);
   
   return false;
 }
