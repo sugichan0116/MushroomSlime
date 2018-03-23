@@ -35,10 +35,12 @@ class Slime {
     else if(getNowFrame() == initFrame) isEating = false;
     //println("@" + isEating + "," + keyCode + ", " + isKeyPressed("ALT"));
     
-    if(isKeyPressed("RIGHT")) { r.x += velocity; direction = "RIGHT"; }
-    if(isKeyPressed("LEFT"))  { r.x -= velocity; direction = "LEFT"; }
-    if(isKeyPressed("UP"))    { r.y -= velocity; direction = "UP"; }
-    if(isKeyPressed("DOWN"))  { r.y += velocity; direction = "DOWN"; }
+    if(!isEating) {
+      if(isKeyPressed("RIGHT")) { r.x += velocity; direction = "RIGHT"; }
+      if(isKeyPressed("LEFT"))  { r.x -= velocity; direction = "LEFT"; }
+      if(isKeyPressed("UP"))    { r.y -= velocity; direction = "UP"; }
+      if(isKeyPressed("DOWN"))  { r.y += velocity; direction = "DOWN"; }
+    }
   }
   
   private float getDirection() {
