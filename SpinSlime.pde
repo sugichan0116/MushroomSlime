@@ -38,12 +38,16 @@ Map<String, AudioPlayer> sounds;
 
 
 void setup() {
+  println("* start up...");
+  
+  println("* system setting...");
   size(960, 540, P2D);
   WIDTH = width;
   HEIGHT = height;
-  
   frameRate(30f);
+  keyState = new KeyState();
   
+  println("* image loading...");
   icons = new HashMap<String, PImage[]>();
   icons.put("SLIME", sliceImage("slime2.png", 32, 32));
   icons.put("SLIME_RIGHT", sliceImage("slime2.png", 32, 32, 2, 2));
@@ -55,6 +59,7 @@ void setup() {
   icons.put("FRAME_FRONT", sliceImage("grassland.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_BACK", sliceImage("grassland_b.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   
+  println("* layer setting...");
   layers = new HashMap<String, PGraphics>();
   layerDepth = new HashMap<String, Float>();
   layers.put("UI", createGraphics(WIDTH, HEIGHT));
@@ -63,8 +68,6 @@ void setup() {
   layerDepth.put("BACK", 1.);
   layers.put("MAIN", createGraphics(WIDTH, HEIGHT));
   layerDepth.put("MAIN", .0);
-  
-  keyState = new KeyState();
   
   //test
   objects = new ArrayList<Article>();
