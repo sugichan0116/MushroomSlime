@@ -1,5 +1,4 @@
-class Slime {
-  private PVector r;
+class Slime extends Article{
   private float playTime, cycleTime;
   private float velocity;
   private String direction;
@@ -17,7 +16,7 @@ class Slime {
   }
   
   void Draw() {
-    PGraphics pg = layers.get("UI");
+    PGraphics pg = layers.get("MAIN");
     pgOpen(pg, r);
       PVector v = new PVector(velocity * cos(playRate() * TAU), 0f);
       if(isMoving) v.rotate(getDirection());

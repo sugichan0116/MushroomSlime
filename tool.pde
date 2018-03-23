@@ -134,6 +134,16 @@ boolean isKeyPressed(String code) {
   return false;
 }
 
+void keyPressed()
+{
+  keyState.putState(keyCode, true);
+}
+
+void keyReleased()
+{
+  keyState.putState(keyCode, false);
+}
+
 float dist(PVector a, PVector b) {
   return dist(a.x, a.y, b.x, b.y);
 }

@@ -1,21 +1,17 @@
 
 class Article {
   private float size, angle;
-  private PVector r, v;
+  protected PVector r, v;
+  
   Article (){
-    r.x = r.y = angle = 0f;
+    r = new PVector(0f, 0f);
+    v = new PVector(0f, 0f);
+    angle = 0f;
     size = 16f;
   }
     
   void Draw() {
-    /*
-    pushMatrix();
-      translate(x - camera.x, y - camera.y);
-      rotate(angle);
-      rectMode(CENTER);
-      rect(0, 0, size, size);
-    popMatrix();
-    */
+    
   }
   
   boolean isDraw() {
@@ -24,7 +20,24 @@ class Article {
     return true;
   }
   
-  PVector getVertex(int id) {
+  void Update() {
+    
+  }
+  
+  boolean isRemove() {
+    return false;
+  }
+  
+  void collide(Article temp) {
+    
+  }
+  
+  boolean isCollide(Article temp) {
+    return isOverlap(temp);
+  }
+  
+  
+  protected PVector getVertex(int id) {
     PVector temp = new PVector(size / 2f, size / 2f);
     
     temp.rotate(angle + id * HALF_PI);
@@ -33,7 +46,7 @@ class Article {
     return temp;
   }
   
-  PVector[] getVertexs() {
+  protected PVector[] getVertexs() {
     PVector[] temp = new PVector[4];
     
     for(int n = 0; n < temp.length; n++ ) {
@@ -43,11 +56,12 @@ class Article {
     return temp;
   }
   
-  boolean isCollision(Article temp) {
-    return isOverlap(temp);
+  protected boolean isOverlap(Article temp) {
+    //精密回転判定
+    return isOverlapRotate(temp);
   }
   
-  boolean isOverlapRotate(Article temp) {
+  protected boolean isOverlapRotate(Article temp) {
     if(dist(r, temp.r) > size + temp.size) return false;
     
     final PVector[][] vertexs = new PVector[2][] ;
@@ -69,20 +83,4 @@ class Article {
     return false;
   }
   
-  boolean isOverlap(Article temp) {
-    //精密回転判定
-    return isOverlapRotate(temp);
-  }
-  
-  void collision(Article temp) {
-    
-  }
-  
-  void Update() {
-    
-  }
-  
-  boolean isDestroyed() {
-    return false;
-  }
 }

@@ -1,4 +1,3 @@
-
 void draw() {
   Update();
   Draw();
@@ -7,14 +6,30 @@ void draw() {
 void Draw() {
   DrawInit();
   
-  gray.Draw();
+  for(Article a : objects) {
+    a.Draw();
+  }
   
-  /* --------test--------------- */
-  PGraphics pg = layers.get("BACK");
+  DrawSystem();
+  
+  DrawLayers();
+}
+
+void Update() {
+  for(Article a : objects) {
+    a.Update();
+  }
+}
+
+
+
+void DrawSystem() {
+  PGraphics pg;
+  
+  pg = layers.get("BACK");
   pg.beginDraw();
-  pg.background(4 * 56);
-  PImage icon = (icons.get("FRAME_BACK"))[0];
-  pg.image(icon, 0, 0);
+    PImage icon = (icons.get("FRAME_BACK"))[0];
+    pg.image(icon, 0, 0);
   pg.endDraw();
   
   
@@ -35,54 +50,12 @@ void Draw() {
       160 + size * n);
   }
   pg.noTint();
-  int n = 0;
-  for(PImage i : (icons.get("SLIME_EAT"))) {
-    //pg.image(i, 200, 100 + i.height * n);
-    n++;
-  }
   pg.endDraw();
-  
   
   pg = layers.get("UI");
   pgOpen(pg);
-  {
     icon = (icons.get("FRAME_FRONT"))[0];
     pg.image(icon, 0, 0);
-  }
   pgClose(pg);
   
-  pg = layers.get("UI");
-  pg.beginDraw();
-  pg.fill(128);
-  pg.rect(50, 50, 100, 50 * sin(frameRate));
-  pg.fill(255);
-  pg.stroke(255);
-  pg.textSize(24);
-  pg.textAlign(LEFT, TOP);
-  pg.text("FPS" + frameRate + "\n" +
-    "ScreenRate" + min(float(width) / float(WIDTH), float(height) / float(HEIGHT)) + "\n" +
-    "mouseX" + mouseX
-    , 0, 0);
-  pg.endDraw();
-  
-  /* ----------------------- */
-  
-  
-  
-  DrawLayers();
-}
-
-void Update() {
-  gray.Update();
-}
-
-
-void keyPressed()
-{
-  keyState.putState(keyCode, true);
-}
-
-void keyReleased()
-{
-  keyState.putState(keyCode, false);
 }
