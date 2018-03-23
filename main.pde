@@ -1,9 +1,11 @@
 void draw() {
+  //call in every frame
   Update();
   Draw();
 }
 
 void Draw() {
+  //init -> draw -> flip
   DrawInit();
   
   for(Article a : objects) {
@@ -16,12 +18,38 @@ void Draw() {
 }
 
 void Update() {
+  //remove
+  for(int n = objects.size() - 1; n >= 0; n-- ) {
+    if((objects.get(n)).isRemove()) objects.remove(n);
+  }
+  
+  //Update
   for(Article a : objects) {
     a.Update();
   }
+  
+  //collide
+  for(int m = 0; m < objects.size() - 1; m++) {
+    for(int n = m + 1; n < objects.size(); n++) {
+      if((objects.get(m)).isCollide(objects.get(n))) {
+        (objects.get(m)).collide(objects.get(n));
+        (objects.get(n)).collide(objects.get(m));
+      }
+    }
+  }
+  
+  //build
+  buildObjects();
 }
 
+void buildObjects() {
+  buildItem();
+}
 
+void buildItem() {
+  if(random(100) < 1f)
+  objects.add(new Item());
+}
 
 void DrawSystem() {
   PGraphics pg;

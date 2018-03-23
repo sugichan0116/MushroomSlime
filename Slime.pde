@@ -7,8 +7,8 @@ class Slime extends Article{
   
   Slime() {
     r = new PVector(10, 10);
-    playTime = 0f;
-    cycleTime = 0.9f;
+    size = 64f;
+    playTime = 0f; cycleTime = 0.9f;
     velocity = 8;
     direction = "RIGHT";
     isMoving = isEating = false;
@@ -19,7 +19,7 @@ class Slime extends Article{
     PGraphics pg = layers.get("MAIN");
     pgOpen(pg, r);
       PVector v = new PVector(velocity * cos(playRate() * TAU), 0f);
-      if(isMoving) v.rotate(getDirection());
+      if(isMoving && !isEating) v.rotate(getDirection());
       else v.set(0f, 0f);
       pg.image(getImage(), v.x, v.y);
       //println("* " + r.x);
@@ -40,6 +40,11 @@ class Slime extends Article{
       if(isKeyPressed("UP"))    { r.y -= velocity; direction = "UP"; }
       if(isKeyPressed("DOWN"))  { r.y += velocity; direction = "DOWN"; }
     }
+  }
+  
+  void setEating() {
+    isEating = true;
+    setNowFrame(initFrame + 1);
   }
   
   private float getDirection() {
@@ -68,6 +73,11 @@ class Slime extends Article{
   
   int getNowFrame() {
     return getFrame(getImages().length);
+  }
+  
+  void setNowFrame(int frame) {
+    playTime = float(frame) * cycleTime / float(getImages().length);
+    playTime %= cycleTime;
   }
   
   private int getFrame(int sheets) {

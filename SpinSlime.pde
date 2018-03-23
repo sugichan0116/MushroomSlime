@@ -55,7 +55,7 @@ void setup() {
   icons.put("SLIME_UP", sliceImage("slime_a.png", 32, 32, 2, 2));
   icons.put("SLIME_EAT", sliceImage("slime_e.png", 32, 32, 2, 2));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
-  icons.put("ITEM", sliceImage("mushroom.png", 16, 16));
+  icons.put("ITEM", sliceImage("mushroom.png", 16, 16, 2, 2));
   icons.put("FRAME_FRONT", sliceImage("grassland.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_BACK", sliceImage("grassland_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   

@@ -1,6 +1,6 @@
 
 class Article {
-  private float size, angle;
+  protected float size, angle;
   protected PVector r, v;
   
   Article (){
@@ -21,7 +21,8 @@ class Article {
   }
   
   void Update() {
-    
+    r.x += v.x / frameRate;
+    r.y += v.y / frameRate;
   }
   
   boolean isRemove() {
@@ -62,7 +63,7 @@ class Article {
   }
   
   protected boolean isOverlapRotate(Article temp) {
-    if(dist(r, temp.r) > size + temp.size) return false;
+    if(dist(r, temp.r) > (size + temp.size) * sqrt(2)) return false;
     
     final PVector[][] vertexs = new PVector[2][] ;
     vertexs[0] = getVertexs();
