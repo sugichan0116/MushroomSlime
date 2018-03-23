@@ -16,6 +16,8 @@ import java.awt.event.ComponentEvent;
 /* game arrays */
 //オブジェクト管理
 //test
+//オブジェクト管理
+ArrayList<Article> objects;
 Slime gray;
 
 /* system */
@@ -48,13 +50,14 @@ void setup() {
   icons.put("SLIME_LEFT", sliceImage("slime2.png", 32, 32, -2, 2));
   icons.put("SLIME_DOWN", sliceImage("slime_b.png", 32, 32, 2, 2));
   icons.put("SLIME_UP", sliceImage("slime_a.png", 32, 32, 2, 2));
+  icons.put("SLIME_EAT", sliceImage("slime_e.png", 32, 32, 2, 2));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
-  icons.put("FOREST", sliceImage("forest.png"));
+  icons.put("FOREST", sliceImage("forest.png", 128, 64, 4, 8));
   
   layers = new HashMap<String, PGraphics>();
   layerDepth = new HashMap<String, Float>();
   layers.put("UI", createGraphics(WIDTH, HEIGHT));
-  layerDepth.put("UI", -1.);
+  layerDepth.put("UI", -2.);
   layers.put("BACK", createGraphics(WIDTH, HEIGHT));
   layerDepth.put("BACK", 1.);
   layers.put("MAIN", createGraphics(WIDTH, HEIGHT));
@@ -63,5 +66,6 @@ void setup() {
   keyState = new KeyState();
   
   //test
+  objects = new ArrayList<Article>();
   gray = new Slime();
 }

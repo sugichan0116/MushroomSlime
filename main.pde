@@ -35,12 +35,21 @@ void Draw() {
   }
   pg.noTint();
   int n = 0;
-  for(PImage i : (icons.get("SLIME"))) {
+  for(PImage i : (icons.get("SLIME_EAT"))) {
     pg.image(i, 200, 100 + i.height * n);
     n++;
   }
   pg.endDraw();
   
+  
+  pg = layers.get("UI");
+  pgOpen(pg);
+  {
+    PImage icon = (icons.get("FOREST"))[0];
+    pg.image(icon, 0, 0);
+    pg.image(icon, icon.width, 0);
+  }
+  pgClose(pg);
   
   pg = layers.get("UI");
   pg.beginDraw();
@@ -55,6 +64,7 @@ void Draw() {
     "mouseX" + mouseX
     , 0, 0);
   pg.endDraw();
+  
   /* ----------------------- */
   
   

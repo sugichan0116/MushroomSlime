@@ -17,6 +17,9 @@ public class KeyState
     this.Key.put(LEFT, false);
     this.Key.put(UP, false);
     this.Key.put(DOWN, false);
+    this.Key.put(ALT, false);
+    this.Key.put(CONTROL, false);
+    this.Key.put(SHIFT, false);
   }
 
   //keyCodeとその入力状態を受け取り、更新する

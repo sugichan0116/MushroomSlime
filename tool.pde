@@ -1,6 +1,24 @@
 
+void pgOpen(PGraphics pg, PVector r) {
+  pgOpen(pg);
+  pg.translate(r.x, r.y);
+  pg.imageMode(CENTER);
+}
+
+void pgOpen(PGraphics pg) {
+  pg.beginDraw();
+  pg.pushMatrix();
+  pg.pushStyle();
+}
+
+void pgClose(PGraphics pg) {
+  pg.popMatrix();
+  pg.popStyle();
+  pg.endDraw();
+}
+
 PImage[] sliceImage(String name) {
-  return sliceImage()
+  return sliceImage(name, 0, 0);
 }
 
 PImage[] sliceImage(String name, int widthSize, int heightSize) {
@@ -109,6 +127,13 @@ boolean isKeyPressed(String code) {
   if(code == "RIGHT") return keyState.getState(RIGHT);
   if(code == "LEFT") return keyState.getState(LEFT);
   if(code == "ARROW") return keyState.getState(UP) | keyState.getState(DOWN) | keyState.getState(RIGHT) | keyState.getState(LEFT);
+  if(code == "ALT") return keyState.getState(ALT);
+  if(code == "CTRL") return keyState.getState(CONTROL);
+  if(code == "SHIFT") return keyState.getState(SHIFT);
   
   return false;
+}
+
+float dist(PVector a, PVector b) {
+  return dist(a.x, a.y, b.x, b.y);
 }

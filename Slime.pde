@@ -3,7 +3,7 @@ class Slime {
   private float playTime, cycleTime;
   private float velocity;
   private String direction;
-  private boolean isMoving;
+  private boolean isMoving, isEating;
   private int initFrame;
   
   Slime() {
@@ -12,26 +12,28 @@ class Slime {
     cycleTime = 0.9f;
     velocity = 8;
     direction = "RIGHT";
-    isMoving = false;
+    isMoving = isEating = false;
     initFrame = 0;
   }
   
   void Draw() {
     PGraphics pg = layers.get("UI");
-    openSpace(pg, r);
+    pgOpen(pg, r);
       PVector v = new PVector(velocity * cos(playRate() * TAU), 0f);
       if(isMoving) v.rotate(getDirection());
       else v.set(0f, 0f);
       pg.image(getImage(), v.x, v.y);
       //println("* " + r.x);
-    closeSpace(pg);
+    pgClose(pg);
   }
   
   void Update() {
     playTimeForAnime();
     
-    if(isKeyPressed("ARROW")) isMoving = true;
-    else isMoving = false;
+    isMoving = isKeyPressed("ARROW");
+    if(isKeyPressed("ALT")) isEating = true;
+    else if(getNowFrame() == initFrame) isEating = false;
+    //println("@" + isEating + "," + keyCode + ", " + isKeyPressed("ALT"));
     
     if(isKeyPressed("RIGHT")) { r.x += velocity; direction = "RIGHT"; }
     if(isKeyPressed("LEFT"))  { r.x -= velocity; direction = "LEFT"; }
@@ -49,7 +51,7 @@ class Slime {
   }
   
   private void playTimeForAnime() {
-    if(getNowFrame() != initFrame || isMoving) playTime += 1f / frameRate;
+    if(getNowFrame() != initFrame || isMoving || isEating) playTime += 1f / frameRate;
     playTime %= cycleTime;
   }
   
@@ -60,7 +62,7 @@ class Slime {
   }
   
   private PImage[] getImages() {
-    return (icons.get("SLIME_" + direction));
+    return (icons.get("SLIME_" + ((isEating) ? "EAT" : direction)));
   }
   
   int getNowFrame() {
@@ -74,22 +76,4 @@ class Slime {
   private float playRate() {
     return playTime / cycleTime;
   }
-}
-
-void openSpace(PGraphics pg, PVector r) {
-  openSpace(pg);
-  pg.translate(r.x, r.y);
-  pg.imageMode(CENTER);
-}
-
-void openSpace(PGraphics pg) {
-  pg.beginDraw();
-  pg.pushMatrix();
-  pg.pushStyle();
-}
-
-void closeSpace(PGraphics pg) {
-  pg.popMatrix();
-  pg.popStyle();
-  pg.endDraw();
 }
