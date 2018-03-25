@@ -4,6 +4,8 @@ class Slime extends Article{
   private String direction;
   protected boolean isMoving, isEating;
   private int initFrame;
+  private float energy;
+  private final float maxEnergy = 5.0f; 
   
   Slime() {
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
@@ -13,15 +15,17 @@ class Slime extends Article{
     direction = "RIGHT";
     isMoving = isEating = false;
     initFrame = 0;
+    energy = 0f;
   }
   
   void Draw() {
     PGraphics pg = layers.get("MAIN");
     pgOpen(pg, r);
-      PVector v = new PVector(velocity / frameRate * cos(playRate() * TAU), 0f);
-      if(isMoving && !isEating) v.rotate(getAngle());
-      else v.set(0f, 0f);
-      pg.image(getImage(), v.x, v.y);
+      PVector i = new PVector(velocity / frameRate * cos(playRate() * TAU), 0f);
+      if(isMoving && !isEating) i.rotate(getAngle());
+      else i.set(0f, 0f);
+      pg.image(getImage(), i.x, i.y);
+      pg.text("E:" + energy, 0f, -size );
     pgClose(pg);
   }
   
@@ -34,13 +38,21 @@ class Slime extends Article{
     ResistLocate();
   }
   
-  private void ResistLocate() {
-    if(isEating) v.x = v.y = 0f;
-    r.x = constrain(r.x, 0, WIDTH);
-    r.y = constrain(r.y, 0, HEIGHT);
+  void setEating() {
+    isEating = true;
+    setNowFrame(initFrame + 1);
   }
   
-  void Move() {
+  void addEnergy(float num) {
+    energy += num;
+    nomalizeEnergy();
+  }
+  
+  private void nomalizeEnergy() {
+    energy = constrain(energy, 0f, maxEnergy);
+  }
+  
+  protected void Move() {
     isMoving = isKeyPressed("ARROW");
     
     v = new PVector();
@@ -53,20 +65,20 @@ class Slime extends Article{
     }
   }
   
+  private void ResistLocate() {
+    if(isEating) v.x = v.y = 0f;
+    r.x = constrain(r.x, 0, WIDTH);
+    r.y = constrain(r.y, 0, HEIGHT);
+  }
+  
   private void setDirection() {
     if(v.mag() < velocity) return;
     
     for(int n = 0; n < 4; n++) {
       if(PVector.angleBetween(v, unitVector(n)) <= PI / 4f) {
         direction = getDirection(n);
-        println(direction);
       }
     }
-  }
-  
-  void setEating() {
-    isEating = true;
-    setNowFrame(initFrame + 1);
   }
   
   private float getAngle() {
@@ -112,11 +124,11 @@ class Slime extends Article{
     return (icons.get("SLIME_" + ((isEating) ? "EAT" : direction)));
   }
   
-  int getNowFrame() {
+  private int getNowFrame() {
     return getFrame(getImages().length);
   }
   
-  void setNowFrame(int frame) {
+  private void setNowFrame(int frame) {
     playTime = float(frame) * cycleTime / float(getImages().length);
     playTime %= cycleTime;
   }

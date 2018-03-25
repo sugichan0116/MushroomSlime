@@ -23,20 +23,24 @@ class Item extends Article {
     if(isRemove) removingTime += 1f / frameRate;
   }
   
-  void collide(Article temp) {
-    //to aproach mouse
+  boolean isCollide(Article temp) {
     if(dist(r, (new PVector(0f, size / 3f)).add(temp.r)) < size) {
-      //one time
-      if(isRemove == false) {
-        //if(temp.getClass() == Slime.class) {
-        if(temp instanceof Slime) {
-          ((Slime)temp).setEating();
-          v.add(temp.r).sub(r).div(removeDelay);
-        }
-      }
-      
-      isRemove = true;
+      return super.isCollide(temp);
     }
+    return false;
+  }
+  
+  void collide(Article temp) {
+    //one time
+    if(temp instanceof Slime) {
+      if(isRemove == false) {
+          ((Slime)temp).setEating();
+          ((Slime)temp).addEnergy(1f);
+          v.add(temp.r).sub(r).div(removeDelay);
+      }
+    }
+    
+    isRemove = true;
   }
   
   boolean isRemove() {

@@ -31,9 +31,10 @@ void Update() {
   //collide
   for(int m = 0; m < objects.size() - 1; m++) {
     for(int n = m + 1; n < objects.size(); n++) {
-      if((objects.get(m)).isCollide(objects.get(n))) {
-        (objects.get(m)).collide(objects.get(n));
-        (objects.get(n)).collide(objects.get(m));
+      Article a = (objects.get(m)), b = (objects.get(n));
+      if(a.isCollide(b) && b.isCollide(a)) {
+        a.collide(b);
+        b.collide(a);
       }
     }
   }
