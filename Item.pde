@@ -28,7 +28,8 @@ class Item extends Article {
     if(dist(r, (new PVector(0f, size / 3f)).add(temp.r)) < size) {
       //one time
       if(isRemove == false) {
-        if(temp.getClass() == Slime.class) {
+        //if(temp.getClass() == Slime.class) {
+        if(temp instanceof Slime) {
           ((Slime)temp).setEating();
           v.add(temp.r).sub(r).div(removeDelay);
         }

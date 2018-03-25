@@ -1,15 +1,15 @@
 class Slime extends Article{
   private float playTime, cycleTime;
-  private float velocity;
+  protected float velocity;
   private String direction;
-  private boolean isMoving, isEating;
+  protected boolean isMoving, isEating;
   private int initFrame;
   
   Slime() {
-    r = new PVector(10, 10);
+    r = new PVector(WIDTH / 2f, HEIGHT / 2f);
     size = 64f;
     playTime = 0f; cycleTime = 0.9f;
-    velocity = 8;
+    velocity = 240f;
     direction = "RIGHT";
     isMoving = isEating = false;
     initFrame = 0;
@@ -18,27 +18,49 @@ class Slime extends Article{
   void Draw() {
     PGraphics pg = layers.get("MAIN");
     pgOpen(pg, r);
-      PVector v = new PVector(velocity * cos(playRate() * TAU), 0f);
-      if(isMoving && !isEating) v.rotate(getDirection());
+      PVector v = new PVector(velocity / frameRate * cos(playRate() * TAU), 0f);
+      if(isMoving && !isEating) v.rotate(getAngle());
       else v.set(0f, 0f);
       pg.image(getImage(), v.x, v.y);
-      //println("* " + r.x);
     pgClose(pg);
   }
   
   void Update() {
+    super.Update();
+    
     playTimeForAnime();
-    
+    Move();
+    setDirection();
+    ResistLocate();
+  }
+  
+  private void ResistLocate() {
+    if(isEating) v.x = v.y = 0f;
+    r.x = constrain(r.x, 0, WIDTH);
+    r.y = constrain(r.y, 0, HEIGHT);
+  }
+  
+  void Move() {
     isMoving = isKeyPressed("ARROW");
-    if(isKeyPressed("ALT")) isEating = true;
-    else if(getNowFrame() == initFrame) isEating = false;
-    //println("@" + isEating + "," + keyCode + ", " + isKeyPressed("ALT"));
     
-    if(!isEating) {
-      if(isKeyPressed("RIGHT")) { r.x += velocity; direction = "RIGHT"; }
-      if(isKeyPressed("LEFT"))  { r.x -= velocity; direction = "LEFT"; }
-      if(isKeyPressed("UP"))    { r.y -= velocity; direction = "UP"; }
-      if(isKeyPressed("DOWN"))  { r.y += velocity; direction = "DOWN"; }
+    v = new PVector();
+    if(isEating == false) {
+      for(int n = 0; n < 4; n++) {
+        if(isKeyPressed(getDirection(n))) {
+          v.add(unitVector(n).mult(velocity));
+        }
+      }
+    }
+  }
+  
+  private void setDirection() {
+    if(v.mag() < velocity) return;
+    
+    for(int n = 0; n < 4; n++) {
+      if(PVector.angleBetween(v, unitVector(n)) <= PI / 4f) {
+        direction = getDirection(n);
+        println(direction);
+      }
     }
   }
   
@@ -47,18 +69,37 @@ class Slime extends Article{
     setNowFrame(initFrame + 1);
   }
   
-  private float getDirection() {
-    if(direction == "RIGHT") return 0f;
-    if(direction == "DOWN") return PI * 0.5f;
-    if(direction == "LEFT") return PI;
-    if(direction == "UP") return PI * 1.5f;
+  private float getAngle() {
+    for(int n = 0; n < 4; n++) {
+      if(direction == getDirection(n)) return PI * float(n) / 2f;
+    }
     
     return 0f;
+  }
+  
+  private PVector unitVector(int n) {
+    return (new PVector(1f, 0f)).rotate(PI * float(n) / 2f);
+  }
+  
+  private String getDirection(int n) {
+    switch(n) {
+      case 0:
+        return "RIGHT";
+      case 1:
+        return "DOWN";
+      case 2:
+        return "LEFT";
+      case 3:
+        return "UP";
+    }
+    return "";
   }
   
   private void playTimeForAnime() {
     if(getNowFrame() != initFrame || isMoving || isEating) playTime += 1f / frameRate;
     playTime %= cycleTime;
+    
+    if(getNowFrame() == initFrame) isEating = false;
   }
   
   private PImage getImage() {
