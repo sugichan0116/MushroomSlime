@@ -28,7 +28,7 @@ void Update() {
     a.Update();
   }
   
-  println("* " + key + keyCode + ", " + keyState.getKey('z') + keyState.getCode(ALT));
+  if(keyState.getKeyOnce('z')) println("* "  + frameRate + ", " + keyState.getKeyOnce('z'));
   //collide
   for(int m = 0; m < objects.size() - 1; m++) {
     for(int n = m + 1; n < objects.size(); n++) {
@@ -42,6 +42,8 @@ void Update() {
   
   //build
   buildObjects();
+  
+  keyState.Update();
 }
 
 void buildObjects() {
