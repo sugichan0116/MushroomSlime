@@ -9,6 +9,10 @@ class Slime extends Article{
   private String inputPort;
   
   Slime() {
+    this("ARROWS");
+  }
+  
+  Slime(String port) {
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
     size = 64f;
     playTime = 0f; cycleTime = 0.9f;
@@ -17,7 +21,7 @@ class Slime extends Article{
     isMoving = isEating = false;
     initFrame = 0;
     energy = 0f;
-    setInputPort("CONTROLLER");
+    setInputPort(port);
   }
   
   void setInputPort(String port) {
