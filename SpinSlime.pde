@@ -23,6 +23,7 @@ ArrayList<Article> objects;
 int WIDTH;
 int HEIGHT;
 KeyState keyState;
+ControlState controlState;
 
 /* materials */
 //icon配列
@@ -45,6 +46,7 @@ void setup() {
   HEIGHT = height;
   frameRate(30f);
   keyState = new KeyState();
+  controlState = new ControlState(this);
   
   println("* image loading...");
   icons = new HashMap<String, PImage[]>();

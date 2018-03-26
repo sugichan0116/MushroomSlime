@@ -6,6 +6,7 @@ class Slime extends Article{
   private int initFrame;
   private float energy;
   private final float maxEnergy = 5.0f; 
+  private String inputPort;
   
   Slime() {
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
@@ -16,6 +17,11 @@ class Slime extends Article{
     isMoving = isEating = false;
     initFrame = 0;
     energy = 0f;
+    setInputPort("CONTROLLER");
+  }
+  
+  void setInputPort(String port) {
+    inputPort = port;
   }
   
   void Draw() {
@@ -53,12 +59,13 @@ class Slime extends Article{
   }
   
   protected void Move() {
-    isMoving = isKeyPressed("ARROW");
+
+    isMoving = isInput(inputPort, "ARROW");
     
     v = new PVector();
     if(isEating == false) {
       for(int n = 0; n < 4; n++) {
-        if(isKeyPressed(getDirection(n))) {
+        if(isInput(inputPort, getDirection(n))) {
           v.add(unitVector(n).mult(velocity));
         }
       }

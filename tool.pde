@@ -110,26 +110,25 @@ void DrawLayers() {
   popMatrix();
 }
 
-boolean isKeyPressed(String code) {
-  /*
-  println("*" + UP + ", " + DOWN + ", " + RIGHT + ", " + LEFT + " ;" + keyCode);
-  if(keyPressed) {
-    if(key == CODED) {
-      if(keyCode == UP && code == "UP") return true;
-      if(keyCode == DOWN && code == "DOWN") return true;
-      if(keyCode == RIGHT && code == "RIGHT") return true;
-      if(keyCode == LEFT && code == "LEFT") return true;
-    }
+boolean isInput(String port, String code) {
+  if(port == "ARROWS") {
+    if(code == "UP") return keyState.getState(UP);
+    if(code == "DOWN") return keyState.getState(DOWN);
+    if(code == "RIGHT") return keyState.getState(RIGHT);
+    if(code == "LEFT") return keyState.getState(LEFT);
+    if(code == "ARROW") return keyState.getState(UP) | keyState.getState(DOWN) | keyState.getState(RIGHT) | keyState.getState(LEFT);
+    if(code == "ALT") return keyState.getState(ALT);
+    if(code == "CTRL") return keyState.getState(CONTROL);
+    if(code == "SHIFT") return keyState.getState(SHIFT);
   }
-  */
-  if(code == "UP") return keyState.getState(UP);
-  if(code == "DOWN") return keyState.getState(DOWN);
-  if(code == "RIGHT") return keyState.getState(RIGHT);
-  if(code == "LEFT") return keyState.getState(LEFT);
-  if(code == "ARROW") return keyState.getState(UP) | keyState.getState(DOWN) | keyState.getState(RIGHT) | keyState.getState(LEFT);
-  if(code == "ALT") return keyState.getState(ALT);
-  if(code == "CTRL") return keyState.getState(CONTROL);
-  if(code == "SHIFT") return keyState.getState(SHIFT);
+  
+  if(port == "CONTROLLER") {
+    if(code == "UP") return controlState.isButton(12);
+    if(code == "DOWN") return controlState.isButton(14);
+    if(code == "RIGHT") return controlState.isButton(13);
+    if(code == "LEFT") return controlState.isButton(15);
+    if(code == "ARROW") return controlState.isButton(12) | controlState.isButton(13) | controlState.isButton(14) | controlState.isButton(15);
+  }
   
   return false;
 }
