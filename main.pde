@@ -28,6 +28,7 @@ void Update() {
     a.Update();
   }
   
+  println("* " + key + keyCode + ", " + keyState.getKey('z') + keyState.getCode(ALT));
   //collide
   for(int m = 0; m < objects.size() - 1; m++) {
     for(int n = m + 1; n < objects.size(); n++) {

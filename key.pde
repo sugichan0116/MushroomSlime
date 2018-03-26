@@ -1,6 +1,7 @@
 public class KeyState
 {
-  HashMap<Integer, Boolean> Key;
+  HashMap<Integer, Boolean> KeyCode;
+  HashMap<Character, Boolean> Key;
 
   //コンストラクタ
   KeyState()
@@ -11,26 +12,29 @@ public class KeyState
   //入力状態の初期化
   void Initialize()
   {
-    this.Key = new HashMap<Integer, Boolean>();
-
-    this.Key.put(RIGHT, false);
-    this.Key.put(LEFT, false);
-    this.Key.put(UP, false);
-    this.Key.put(DOWN, false);
-    this.Key.put(ALT, false);
-    this.Key.put(CONTROL, false);
-    this.Key.put(SHIFT, false);
+    this.KeyCode = new HashMap<Integer, Boolean>();
+    this.Key = new HashMap<Character, Boolean>();
+    
+    for(int n = 0; n < 256; n++) {
+      this.Key.put(char(n), false);
+      this.KeyCode.put(n, false);
+    }
   }
 
   //keyCodeとその入力状態を受け取り、更新する
-  void putState(int code, boolean state)
+  void putState(char keys, int codes, boolean state)
   {
-    this.Key.put(code, state);
+    if(keys == CODED) this.KeyCode.put(codes, state);
+    else this.Key.put(keys, state);
   }
-
-  //keyCodeを受け取り、その入力状態を返す
-  boolean getState(int code)
-  {
-    return this.Key.get(code);
+  
+  boolean getCode(int codes) {
+    return this.KeyCode.get(codes);
   }
+  
+  boolean getKey(char keys) {
+    return this.Key.get(keys);
+  }
+  
+  
 }

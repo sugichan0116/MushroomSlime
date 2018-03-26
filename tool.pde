@@ -112,35 +112,57 @@ void DrawLayers() {
 
 boolean isInput(String port, String code) {
   if(port == "ARROWS") {
-    if(code == "UP") return keyState.getState(UP);
-    if(code == "DOWN") return keyState.getState(DOWN);
-    if(code == "RIGHT") return keyState.getState(RIGHT);
-    if(code == "LEFT") return keyState.getState(LEFT);
-    if(code == "ARROW") return keyState.getState(UP) | keyState.getState(DOWN) | keyState.getState(RIGHT) | keyState.getState(LEFT);
-    if(code == "ALT") return keyState.getState(ALT);
-    if(code == "CTRL") return keyState.getState(CONTROL);
-    if(code == "SHIFT") return keyState.getState(SHIFT);
+    if(code == "UP") return keyState.getCode(UP);
+    if(code == "DOWN") return keyState.getCode(DOWN);
+    if(code == "RIGHT") return keyState.getCode(RIGHT);
+    if(code == "LEFT") return keyState.getCode(LEFT);
+    if(code == "A") return keyState.getKey('z');
+    if(code == "B") return keyState.getKey('x');
+    if(code == "X") return keyState.getCode(SHIFT);
+    if(code == "Y") return keyState.getKey(' ');
+  }
+  
+  if(port == "KEYBOARD") {
+    if(code == "UP") return keyState.getKey('w');
+    if(code == "DOWN") return keyState.getKey('s');
+    if(code == "RIGHT") return keyState.getKey('d');
+    if(code == "LEFT") return keyState.getKey('a');
+    if(code == "A") return keyState.getKey('l');
+    if(code == "B") return keyState.getKey('k');
+    if(code == "X") return keyState.getKey('i');
+    if(code == "Y") return keyState.getKey('j');
   }
   
   if(port == "CONTROLLER") {
-    if(code == "UP") return controlState.isButton(12);
-    if(code == "DOWN") return controlState.isButton(14);
-    if(code == "RIGHT") return controlState.isButton(13);
-    if(code == "LEFT") return controlState.isButton(15);
-    if(code == "ARROW") return controlState.isButton(12) | controlState.isButton(13) | controlState.isButton(14) | controlState.isButton(15);
+    if(code == "UP") return controlState.isArrow("UP");
+    if(code == "DOWN") return controlState.isArrow("DOWN");
+    if(code == "RIGHT") return controlState.isArrow("RIGHT");
+    if(code == "LEFT") return controlState.isArrow("LEFT");
+    if(code == "A") return controlState.isButton(1);
+    if(code == "B") return controlState.isButton(2);
+    if(code == "X") return controlState.isButton(0);
+    if(code == "Y") return controlState.isButton(3);
+    
   }
+  
+  if(code == "COMMAND") return isInput(port, "A") | isInput(port, "B") | isInput(port, "X") | isInput(port, "Y");
+  if(code == "ARROW") return isInput(port, "UP") | isInput(port, "RIGHT") | isInput(port, "DOWN") | isInput(port, "LEFT");
   
   return false;
 }
 
+int keyCode(char c) {
+  return int(c);
+}
+
 void keyPressed()
 {
-  keyState.putState(keyCode, true);
+  keyState.putState(key, keyCode, true);
 }
 
 void keyReleased()
 {
-  keyState.putState(keyCode, false);
+  keyState.putState(key, keyCode, false);
 }
 
 float dist(PVector a, PVector b) {

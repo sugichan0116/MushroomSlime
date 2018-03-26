@@ -75,5 +75,6 @@ void setup() {
   objects = new ArrayList<Article>();
   objects.add(new Slime());
   objects.add(new Slime("CONTROLLER"));
+  objects.add(new Slime("KEYBOARD"));
   objects.add(new AutoSlime());
 }
