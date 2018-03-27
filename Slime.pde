@@ -6,6 +6,7 @@ class Slime extends Article{
   private boolean isDead, isShield;
   private float playTime, cycleTime;
   protected float velocity;
+  private final float speed = 240f;
   private String direction;
   protected boolean isMoving, isEating;
   private int initFrame;
@@ -16,6 +17,8 @@ class Slime extends Article{
   private final float gaugeMaxTime = 2.0f;
   private float shootCoolTime;
   private final float shootMaxTime = 0.2f;
+  private float shieldPlayTime;
+  private final float shieldCycleTime = 0.3f;
   
   Slime() {
     this(int(random(4)) + 4, "ARROWS");
@@ -25,7 +28,7 @@ class Slime extends Article{
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
     size = 64f;
     playTime = 0f; cycleTime = 0.9f;
-    velocity = 240f;
+    velocity = speed;
     direction = "RIGHT";
     isMoving = isEating = false;
     initFrame = 0;
@@ -52,12 +55,20 @@ class Slime extends Article{
       
       pg.tint(tintColor);
       pg.image(getImage(), i.x, i.y);
-      if(isShield) pg.image(icons.get("SHIELD")[0], i.x, i.y);
       pg.text("team" + team, 0, -size);
       pg.noTint();
       
     pgClose(pg);
+    DrawShield(pg, i);
     DrawGauge(pg);
+  }
+  
+  void DrawShield(PGraphics pg, PVector i) {
+    pgOpen(pg, r);
+    PImage[] tiles = icons.get("SHIELD");
+    pg.tint(tintColor);
+    if(isShield) pg.image(tiles[int((tiles.length - 1) * shieldPlayTime / shieldCycleTime)], i.x, i.y);
+    pgClose(pg);
   }
   
   void DrawGauge(PGraphics pg) {
@@ -90,6 +101,8 @@ class Slime extends Article{
     ResistLocate();
     if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
     if(shootCoolTime > 0f) shootCoolTime -= 1f / frameRate;
+    shieldPlayTime += 1f / frameRate;
+    shieldPlayTime %= shieldCycleTime;
   }
   
   void collide(Article temp) {
@@ -132,6 +145,8 @@ class Slime extends Article{
   }
   
   void selectCommand() {
+    velocity = speed;
+    
     if(isInput(inputPort, "A")) {
       command("A");
     }
@@ -140,6 +155,9 @@ class Slime extends Article{
     }
     if(isInput(inputPort, "X")) {
       command("X");
+    }
+    if(isInput(inputPort, "Y")) {
+      command("Y");
     }
   }
   
@@ -151,7 +169,7 @@ class Slime extends Article{
       bullets = new PVector[1];
       bullets[0] = (v.mag() < velocity) ? (new PVector(velocity, 0f)).rotate(getAngle()) : (new PVector(v.x, v.y).mult(2f));
     }
-    if(button == "B") {
+    if(button == "Y") {
       demandEnergy = 2.0f;
       if(isShield == false && subEnergy(demandEnergy)) {
         isShield = true;
@@ -165,6 +183,14 @@ class Slime extends Article{
       for(int n = 0; n < 8; n++) {
         bullets[n] = (new PVector(velocity, 0f)).rotate(TAU * float(n) / 8f);
       }
+    }
+    if(button == "B") {
+      demandEnergy = 1f / frameRate;
+      if(subEnergy(demandEnergy)) {
+        velocity = speed * 2f;
+        gaugeVisibleTime = gaugeMaxTime;
+      }
+      return;
     }
     
     if(shootCoolTime <= 0f && subEnergy(demandEnergy)) {

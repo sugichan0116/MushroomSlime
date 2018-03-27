@@ -79,7 +79,4 @@ void setup() {
   objects.add(new Slime(1, "CONTROLLER"));
   objects.add(new Slime(2, "KEYBOARD"));
   objects.add(new AutoSlime());
-  objects.add(new AutoSlime());
-  objects.add(new AutoSlime());
-  objects.add(new AutoSlime());
 }
