@@ -32,7 +32,7 @@ class Slime extends Article{
     energy = 0f;
     setInputPort(port);
     tintColor = color(random(128) + 128, random(128) + 128, random(128) + 128);
-    gaugeImage = icons.get("GAUSE")[0];
+    gaugeImage = icons.get("GAUSE")[3];
     gaugeVisibleTime = 0f;
     isDead = isShield = false;
     this.team = team;
