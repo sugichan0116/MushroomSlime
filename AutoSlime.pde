@@ -10,13 +10,13 @@ class AutoSlime extends Slime {
     movingTime += 1f / frameRate;
     isMoving = true;
     
-    if(targetTime <= movingTime) {
+    if(targetTime <= movingTime || v.mag() <= 0f) {
       movingTime = 0f;
       v = (new PVector(velocity, 0f)).rotate(random(TAU));
     }
   }
   
   void selectCommand() {
-    command("A");
+    if(isMoving && !isEating) command("A");
   }
 }
