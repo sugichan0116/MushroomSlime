@@ -18,7 +18,7 @@ class Slime extends Article{
   private final float shootMaxTime = 0.2f;
   
   Slime() {
-    this(int(random(4)), "ARROWS");
+    this(int(random(4)) + 4, "ARROWS");
   }
   
   Slime(int team, String port) {
@@ -84,7 +84,7 @@ class Slime extends Article{
     
     playTimeForAnime();
     Move();
-    Attack();
+    selectAttack();
     setDirection();
     ResistLocate();
     if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
@@ -129,17 +129,42 @@ class Slime extends Article{
     return buf == energy;
   }
   
-  protected void Attack() {
+  private void selectAttack() {
     if(isInput(inputPort, "A")) {
-      if(shootCoolTime <= 0f && subEnergy(0.1f)) {
-        shootCoolTime = shootMaxTime;
-        gaugeVisibleTime = gaugeMaxTime;
+      Attack("A");
+    }
+    if(isInput(inputPort, "X")) {
+      Attack("X");
+    }
+  }
+  
+  protected void Attack(String command) {
+    float demandEnergy = 0f;
+    PVector[] bullets = new PVector[0];
+    if(command == "A") {
+      demandEnergy = 0.1f;
+      bullets = new PVector[1];
+      bullets[0] = (v.mag() < velocity) ? (new PVector(velocity, 0f)).rotate(getAngle()) : (new PVector(v.x, v.y).mult(2f));
+    }
+    if(command == "X") {
+      demandEnergy = 1.0f;
+      bullets = new PVector[8];
+      for(int n = 0; n < 8; n++) {
+        bullets[n] = (new PVector(velocity, 0f)).rotate(TAU * float(n) / 8f);
+      }
+    }
+    
+    
+    if(shootCoolTime <= 0f && subEnergy(demandEnergy)) {
+      shootCoolTime = shootMaxTime;
+      gaugeVisibleTime = gaugeMaxTime;
+      for(int n = 0; n < bullets.length; n++) {
         objects.add(
           new Bullet(
             team,
             tintColor,
             new PVector(r.x, r.y),
-            (v.mag() < velocity) ? (new PVector(velocity, 0f)).rotate(getAngle()) : (new PVector(v.x, v.y).mult(2f))
+            bullets[n]
           )
         );
       }
