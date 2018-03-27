@@ -16,7 +16,7 @@ class AutoSlime extends Slime {
     }
   }
   
-  void selectAttack() {
-    Attack("A");
+  void selectCommand() {
+    command("A");
   }
 }

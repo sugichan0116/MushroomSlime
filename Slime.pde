@@ -3,7 +3,7 @@ class Slime extends Article{
   private color tintColor;
   private int team;
   
-  private boolean isDead;
+  private boolean isDead, isShield;
   private float playTime, cycleTime;
   protected float velocity;
   private String direction;
@@ -34,7 +34,7 @@ class Slime extends Article{
     tintColor = color(random(128) + 128, random(128) + 128, random(128) + 128);
     gaugeImage = icons.get("GAUSE")[0];
     gaugeVisibleTime = 0f;
-    isDead = false;
+    isDead = isShield = false;
     this.team = team;
     shootCoolTime = 0f;
   }
@@ -52,6 +52,7 @@ class Slime extends Article{
       
       pg.tint(tintColor);
       pg.image(getImage(), i.x, i.y);
+      if(isShield) pg.image(icons.get("SHIELD")[0], i.x, i.y);
       pg.text("team" + team, 0, -size);
       pg.noTint();
       
@@ -84,7 +85,7 @@ class Slime extends Article{
     
     playTimeForAnime();
     Move();
-    selectAttack();
+    selectCommand();
     setDirection();
     ResistLocate();
     if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
@@ -94,7 +95,8 @@ class Slime extends Article{
   void collide(Article temp) {
     if(temp instanceof Bullet) {
       //println("* You Dead!");
-      isDead = true;
+      if(isShield) isShield = false;
+      else isDead = true;
     }
   }
   
@@ -129,31 +131,41 @@ class Slime extends Article{
     return buf == energy;
   }
   
-  private void selectAttack() {
+  private void selectCommand() {
     if(isInput(inputPort, "A")) {
-      Attack("A");
+      command("A");
+    }
+    if(isInput(inputPort, "B")) {
+      command("B");
     }
     if(isInput(inputPort, "X")) {
-      Attack("X");
+      command("X");
     }
   }
   
-  protected void Attack(String command) {
+  void command(String button) {
     float demandEnergy = 0f;
     PVector[] bullets = new PVector[0];
-    if(command == "A") {
+    if(button == "A") {
       demandEnergy = 0.1f;
       bullets = new PVector[1];
       bullets[0] = (v.mag() < velocity) ? (new PVector(velocity, 0f)).rotate(getAngle()) : (new PVector(v.x, v.y).mult(2f));
     }
-    if(command == "X") {
+    if(button == "B") {
+      demandEnergy = 2.0f;
+      if(isShield == false && subEnergy(demandEnergy)) {
+        isShield = true;
+        gaugeVisibleTime = gaugeMaxTime;
+      }
+      return;
+    }
+    if(button == "X") {
       demandEnergy = 1.0f;
       bullets = new PVector[8];
       for(int n = 0; n < 8; n++) {
         bullets[n] = (new PVector(velocity, 0f)).rotate(TAU * float(n) / 8f);
       }
     }
-    
     
     if(shootCoolTime <= 0f && subEnergy(demandEnergy)) {
       shootCoolTime = shootMaxTime;

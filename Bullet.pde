@@ -13,7 +13,7 @@ class Bullet extends Article{
   void Draw() {
     PGraphics pg = layers.get("MAIN");
     pgOpen(pg,r);
-      pg.tint(tintColor);
+      pg.tint(lerpColor(tintColor, color(0), 0.5f));
       pg.image(icons.get("BULLET")[0], 0, 0);
     pgClose(pg);
   }
