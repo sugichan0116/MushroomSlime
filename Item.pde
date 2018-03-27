@@ -6,8 +6,12 @@ class Item extends Article {
   private final float ripeTime = 4f;
   
   Item() {
-    r.x = random(WIDTH);
-    r.y = random(HEIGHT);
+    r = new PVector(random(1f), 0f);
+    r.rotate(random(TAU));
+    r.x *= WIDTH;
+    r.y *= HEIGHT;
+    r.div(3f).add(WIDTH * .5f, HEIGHT * .6f);
+    
     size = 32f;
     isRemove = false;
     removingTime = growthTime = 0f;
@@ -40,6 +44,7 @@ class Item extends Article {
   }
   
   boolean isCollide(Article temp) {
+    if(temp instanceof Slime == false) return false;
     if(getGrowth() <= 1) return false;
     if(dist(r, (new PVector(0f, size / 3f)).add(temp.r)) < size) {
       return super.isCollide(temp);
