@@ -9,7 +9,7 @@ void Draw() {
   DrawInit();
   
   for(Article a : objects) {
-    a.Draw();
+    if(a.isDraw()) a.Draw();
   }
   
   DrawSystem();
@@ -21,14 +21,9 @@ void Update() {
   //remove
   for(int n = objects.size() - 1; n >= 0; n-- ) {
     if((objects.get(n)).isRemove()) objects.remove(n);
+    else (objects.get(n)).Update();
   }
   
-  //Update
-  for(Article a : objects) {
-    a.Update();
-  }
-  
-  if(keyState.getKeyOnce('z')) println("* "  + frameRate + ", " + keyState.getKeyOnce('z'));
   //collide
   for(int m = 0; m < objects.size() - 1; m++) {
     for(int n = m + 1; n < objects.size(); n++) {
@@ -43,7 +38,7 @@ void Update() {
   //build
   buildObjects();
   
-  controlState.stateLog();
+  //controlState.stateLog();
   keyState.Update();
 }
 

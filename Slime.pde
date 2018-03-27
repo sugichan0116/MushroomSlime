@@ -1,4 +1,9 @@
 class Slime extends Article{
+  private String inputPort;
+  private color tintColor;
+  private int team;
+  
+  private boolean isDead;
   private float playTime, cycleTime;
   protected float velocity;
   private String direction;
@@ -6,17 +11,15 @@ class Slime extends Article{
   private int initFrame;
   private float energy;
   private final float maxEnergy = 8.0f; 
-  private String inputPort;
-  private color tintColor;
   private PImage gaugeImage;
   private float gaugeVisibleTime;
   private final float gaugeMaxTime = 1.2f;
   
   Slime() {
-    this("ARROWS");
+    this(int(random(4)), "ARROWS");
   }
   
-  Slime(String port) {
+  Slime(int team, String port) {
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
     size = 64f;
     playTime = 0f; cycleTime = 0.9f;
@@ -29,6 +32,8 @@ class Slime extends Article{
     tintColor = color(random(128) + 128, random(128) + 128, random(128) + 128);
     gaugeImage = icons.get("GAUSE")[0];
     gaugeVisibleTime = 0f;
+    isDead = false;
+    this.team = team;
   }
   
   void setInputPort(String port) {
@@ -44,6 +49,7 @@ class Slime extends Article{
       
       pg.tint(tintColor);
       pg.image(getImage(), i.x, i.y);
+      pg.text("team" + team, 0, -size);
       pg.noTint();
       
     pgClose(pg);
@@ -75,9 +81,25 @@ class Slime extends Article{
     
     playTimeForAnime();
     Move();
+    Attack();
     setDirection();
     ResistLocate();
     if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
+  }
+  
+  void collide(Article temp) {
+    if(temp instanceof Bullet) {
+      //println("* You Dead!");
+      isDead = true;
+    }
+  }
+  
+  boolean isRemove() {
+    return isDead;
+  }
+  
+  int getTeam() {
+    return team;
   }
   
   void setEating() {
@@ -86,13 +108,35 @@ class Slime extends Article{
     gaugeVisibleTime = gaugeMaxTime;
   }
   
-  void addEnergy(float num) {
+  boolean addEnergy(float num) {
     energy += num;
-    nomalizeEnergy();
+    return nomalizeEnergy();
   }
   
-  private void nomalizeEnergy() {
+  boolean subEnergy(float num) {
+    if(energy < num) return false;
+    energy -= num;
+    return nomalizeEnergy();
+  }
+  
+  private boolean nomalizeEnergy() {
+    float buf = energy;
     energy = constrain(energy, 0f, maxEnergy);
+    return buf == energy;
+  }
+  
+  protected void Attack() {
+    if(isInput(inputPort, "A")) {
+      if(subEnergy(0.1f))
+        objects.add(
+          new Bullet(
+            team,
+            tintColor,
+            new PVector(r.x, r.y),
+            (v.mag() < velocity) ? (new PVector(velocity, 0f)).rotate(getAngle()) : (new PVector(v.x, v.y).mult(2f))
+          )
+        );
+    }
   }
   
   protected void Move() {
