@@ -35,7 +35,7 @@ class Item extends Article {
   
   void Update() {
     super.Update();
-    growthTime += 1f / frameRate;
+    if(!isRemove) growthTime += 1f / frameRate;
     if(isRemove) removingTime += 1f / frameRate;
   }
   

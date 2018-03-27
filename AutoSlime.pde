@@ -12,7 +12,8 @@ class AutoSlime extends Slime {
     
     if(targetTime <= movingTime || v.mag() <= 0f) {
       movingTime = 0f;
-      v = (new PVector(velocity, 0f)).rotate(random(TAU));
+      v = (new PVector(WIDTH / 2f, HEIGHT / 2f)).sub(r).normalize().mult(velocity).rotate(TAU * (-.3f + random(.6f)));
+      if(v.mag() <= 0f) v = new PVector(velocity, 0); 
     }
   }
   
