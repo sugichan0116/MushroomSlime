@@ -13,7 +13,9 @@ class Slime extends Article{
   private final float maxEnergy = 8.0f; 
   private PImage gaugeImage;
   private float gaugeVisibleTime;
-  private final float gaugeMaxTime = 1.2f;
+  private final float gaugeMaxTime = 2.0f;
+  private float shootCoolTime;
+  private final float shootMaxTime = 0.2f;
   
   Slime() {
     this(int(random(4)), "ARROWS");
@@ -34,6 +36,7 @@ class Slime extends Article{
     gaugeVisibleTime = 0f;
     isDead = false;
     this.team = team;
+    shootCoolTime = 0f;
   }
   
   void setInputPort(String port) {
@@ -85,6 +88,7 @@ class Slime extends Article{
     setDirection();
     ResistLocate();
     if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
+    if(shootCoolTime > 0f) shootCoolTime -= 1f / frameRate;
   }
   
   void collide(Article temp) {
@@ -127,7 +131,9 @@ class Slime extends Article{
   
   protected void Attack() {
     if(isInput(inputPort, "A")) {
-      if(subEnergy(0.1f))
+      if(shootCoolTime <= 0f && subEnergy(0.1f)) {
+        shootCoolTime = shootMaxTime;
+        gaugeVisibleTime = gaugeMaxTime;
         objects.add(
           new Bullet(
             team,
@@ -136,6 +142,7 @@ class Slime extends Article{
             (v.mag() < velocity) ? (new PVector(velocity, 0f)).rotate(getAngle()) : (new PVector(v.x, v.y).mult(2f))
           )
         );
+      }
     }
   }
   
