@@ -40,6 +40,7 @@ class Item extends Article {
   }
   
   boolean isCollide(Article temp) {
+    if(getGrowth() <= 1) return false;
     if(dist(r, (new PVector(0f, size / 3f)).add(temp.r)) < size) {
       return super.isCollide(temp);
     }
