@@ -34,6 +34,19 @@ public class ControlState
 
   }
   
+  void stateLog() {
+    
+    for(int n = 0; n < buttons.length; n++) {
+      print(buttons[n].pressed() + ", ");
+    }
+    
+    for(int n = 0; n < sliders.length; n++) {
+      print(sliders[n].getValue() + ", ");
+    }
+    
+    println();
+  }
+  
   boolean isButton(int id) {
     if(id < 0 || buttons.length <= id) return false;
     return buttons[id].pressed();

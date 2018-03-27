@@ -43,6 +43,7 @@ void Update() {
   //build
   buildObjects();
   
+  controlState.stateLog();
   keyState.Update();
 }
 

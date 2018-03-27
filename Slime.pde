@@ -5,7 +5,7 @@ class Slime extends Article{
   protected boolean isMoving, isEating;
   private int initFrame;
   private float energy;
-  private final float maxEnergy = 5.0f; 
+  private final float maxEnergy = 8.0f; 
   private String inputPort;
   
   Slime() {
