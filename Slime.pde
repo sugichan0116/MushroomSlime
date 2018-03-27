@@ -131,7 +131,7 @@ class Slime extends Article{
     return buf == energy;
   }
   
-  private void selectCommand() {
+  void selectCommand() {
     if(isInput(inputPort, "A")) {
       command("A");
     }
