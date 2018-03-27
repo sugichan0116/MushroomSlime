@@ -58,6 +58,7 @@ void setup() {
   icons.put("SLIME_EAT", sliceImage("slime_e.png", 32, 32, 2, 2));
   icons.put("SLIME_YELLOW", sliceImage("slime.png", 32, 32));
   icons.put("ITEM", sliceImage("mushroom.png", 16, 16, 2, 2));
+  icons.put("GAUSE", sliceImage("mushroom.png", 16, 16));
   icons.put("FRAME_FRONT", sliceImage("grassland_d.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_BACK", sliceImage("grassland_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   
@@ -76,5 +77,8 @@ void setup() {
   objects.add(new Slime());
   objects.add(new Slime("CONTROLLER"));
   objects.add(new Slime("KEYBOARD"));
+  objects.add(new AutoSlime());
+  objects.add(new AutoSlime());
+  objects.add(new AutoSlime());
   objects.add(new AutoSlime());
 }

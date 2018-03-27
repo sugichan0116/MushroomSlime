@@ -7,6 +7,10 @@ class Slime extends Article{
   private float energy;
   private final float maxEnergy = 8.0f; 
   private String inputPort;
+  private color tintColor;
+  private PImage gaugeImage;
+  private float gaugeVisibleTime;
+  private final float gaugeMaxTime = 1.2f;
   
   Slime() {
     this("ARROWS");
@@ -22,6 +26,9 @@ class Slime extends Article{
     initFrame = 0;
     energy = 0f;
     setInputPort(port);
+    tintColor = color(random(128) + 128, random(128) + 128, random(128) + 128);
+    gaugeImage = icons.get("GAUSE")[0];
+    gaugeVisibleTime = 0f;
   }
   
   void setInputPort(String port) {
@@ -34,8 +41,32 @@ class Slime extends Article{
       PVector i = new PVector(velocity / frameRate * cos(playRate() * TAU), 0f);
       if(isMoving && !isEating) i.rotate(getAngle());
       else i.set(0f, 0f);
+      
+      pg.tint(tintColor);
       pg.image(getImage(), i.x, i.y);
-      pg.text("E:" + energy, 0f, -size );
+      pg.noTint();
+      
+    pgClose(pg);
+    DrawGauge(pg);
+  }
+  
+  void DrawGauge(PGraphics pg) {
+    if(gaugeVisibleTime <= 0f) return;
+    pgOpen(pg, r);
+      float w = gaugeImage.width * 4, h = gaugeImage.height;
+      pg.tint(64);
+      for(int n = 0; n < 4; n++) {
+        pg.image(gaugeImage, (w - h) * (-.5f + float(n) / 3f), size * -.5f);
+      }
+      pg.noTint();
+      pg.imageMode(CORNERS);
+      pg.clip(w * -.5f, size * -.5f - h, w * (-.5f + energy / maxEnergy), 0f);
+      for(int n = 0; n < 4; n++) {
+        pg.imageMode(CENTER);
+        pg.image(gaugeImage, (w - h) * (-.5f + float(n) / 3f), size * -.5f);
+      }
+      //pg.noClip();
+      //pg.imageMode(CENTER);
     pgClose(pg);
   }
   
@@ -46,11 +77,13 @@ class Slime extends Article{
     Move();
     setDirection();
     ResistLocate();
+    if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
   }
   
   void setEating() {
     isEating = true;
     setNowFrame(initFrame + 1);
+    gaugeVisibleTime = gaugeMaxTime;
   }
   
   void addEnergy(float num) {
