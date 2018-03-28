@@ -110,6 +110,23 @@ void DrawLayers() {
   popMatrix();
 }
 
+boolean isInput(String code) {
+  String[] ports = {"ARROWS", "KEYBOARD"};
+  boolean is = false;
+  
+  for(String port: ports) {
+    is = is || isInput(port, code);
+  }
+  
+  int id = 0;
+  while(controlState.setControlID(id)) {
+    is = is || isInput("CONTROLLER", code);
+    id++;
+  }
+  
+  return is;
+}
+
 boolean isInput(String port, String code) {
   if(port == "ARROWS") {
     if(code == "UP") return keyState.getCode(UP);
@@ -120,7 +137,7 @@ boolean isInput(String port, String code) {
     if(code == "B") return keyState.getKey('x');
     if(code == "X") return keyState.getCode('c');
     if(code == "Y") return keyState.getKey(' ');
-    if(code == "START") return keyState.getCode(DELETE);
+    if(code == "START") return keyState.getKey(DELETE);
   }
   
   if(port == "KEYBOARD") {
@@ -132,7 +149,7 @@ boolean isInput(String port, String code) {
     if(code == "B") return keyState.getKey('k');
     if(code == "X") return keyState.getKey('i');
     if(code == "Y") return keyState.getKey('j');
-    if(code == "START") return keyState.getCode(DELETE);
+    if(code == "START") return keyState.getKey(DELETE);
   }
   
   if(port == "CONTROLLER") {

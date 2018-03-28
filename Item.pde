@@ -50,9 +50,13 @@ class Item extends Article {
     if(isRemove) removingTime += 1f / frameRate;
   }
   
+  boolean isEat() {
+    return getGrowth() > 1;
+  }
+  
   boolean isCollide(Article temp) {
     if(temp instanceof Slime == false) return false;
-    if(getGrowth() <= 1) return false;
+    if(!isEat()) return false;
     if(dist(r, (new PVector(0f, size / 3f)).add(temp.r)) < size) {
       return super.isCollide(temp);
     }

@@ -68,7 +68,7 @@ class Slime extends Article{
       
       pg.tint(tintColor);
       pg.image(getImage(), i.x, i.y);
-      pg.text("team" + team, 0, -size);
+      pg.text(((this.getClass() == AutoSlime.class) ? "[CPU]  " + ((AutoSlime)this).getNature() : "team" + team), 0, -size);
       pg.noTint();
       
     pgClose(pg);

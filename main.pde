@@ -41,7 +41,7 @@ void Update() {
   controlState.stateLog();
   keyState.Update();
   
-  if(keyState.getCode(DELETE) || controlState.isButton("START")) {
+  if(isInput("START") || winTeam() >= 0) {
     restart();
   }
 }
@@ -51,7 +51,7 @@ void buildObjects() {
 }
 
 void buildItem() {
-  if(random(100) < 8f)
+  if(random(100) < countSlime() * 2f)
   objects.add(new Item());
   if(random(1000) < 1f)
   objects.add(new Item("ITEM_BIG", 16f, 1.4f));
@@ -70,21 +70,31 @@ void DrawSystem() {
   pgOpen(pg);
     icon = (icons.get("FRAME_FRONT"))[0];
     pg.image(icon, 0, 0);
-    int count = 0, winteam = -1;
-    for(Article a: objects) {
-      if(a instanceof Slime) {
-        count++;
-        Slime s = (Slime)a;
-        if(winteam == -1) winteam = s.getTeam();
-        else winteam = -2;
-      }
-    }
-    pg.textSize(24);
-    pg.textAlign(LEFT, TOP);
-    pg.text("* " + "Slime[s]" + count, 24, 24);
     pg.textSize(72);
     pg.textAlign(CENTER, CENTER);
-    pg.text(((winteam >= 0) ? "Win " + winteam : ""), WIDTH / 2f, HEIGHT / 2f);
+    pg.text(((winTeam() >= 0) ? "Win " + winTeam() : ""), WIDTH / 2f, HEIGHT / 2f);
   pgClose(pg);
   
+}
+
+int countSlime() {
+  int count = 0;
+  for(Article a: objects) {
+    if(a instanceof Slime) {
+      count++;
+    }
+  }
+  return count;
+}
+
+int winTeam() {
+  int winteam = -1;
+  for(Article a: objects) {
+    if(a instanceof Slime) {
+      Slime s = (Slime)a;
+      if(winteam == -1) winteam = s.getTeam();
+      else winteam = -2;
+    }
+  }
+  return winteam;
 }

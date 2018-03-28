@@ -79,8 +79,14 @@ void setup() {
 
 void restart() {
   objects = new ArrayList<Article>();
-  objects.add(new Slime(0, "ARROWS"));
-  objects.add(new Slime(1, "CONTROLLER", 0));
-  objects.add(new Slime(3, "CONTROLLER", 1));
-  objects.add(new Slime(2, "KEYBOARD"));
+  //objects.add(new Slime(2, "ARROWS"));
+  objects.add(new Slime(0, "CONTROLLER", 0));
+  objects.add(new Slime(1, "CONTROLLER", 1));
+  //objects.add(new Slime(3, "KEYBOARD"));
+  objects.add(new AutoSlime(2));
+  objects.add(new AutoSlime(3));
+  objects.add(new AutoSlime(4));
+  objects.add(new AutoSlime(5));
+  objects.add(new AutoSlime(6));
+  objects.add(new AutoSlime(7));
 }
