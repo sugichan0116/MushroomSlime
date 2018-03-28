@@ -17,7 +17,7 @@ class Article {
   boolean isDraw() {
     //return (0 <= x + size && x - size <= camera.x + width) &&
     //  (camera.y <= y + size && y - size <= camera.y + height);
-    return true;
+    return isRemove() == false;
   }
   
   void Update() {

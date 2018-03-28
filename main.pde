@@ -20,8 +20,11 @@ void Draw() {
 void Update() {
   //remove
   for(int n = objects.size() - 1; n >= 0; n-- ) {
-    if((objects.get(n)).isRemove()) objects.remove(n);
-    else (objects.get(n)).Update();
+    Article a = objects.get(n);
+    if(a.isRemove()) {
+      objects.remove(n);
+    }
+    else a.Update();
   }
   
   //collide
@@ -41,7 +44,9 @@ void Update() {
   controlState.stateLog();
   keyState.Update();
   
-  if(isInput("START") || winTeam() >= 0) {
+  timer += 1f / frameRate;
+  if(winTeam() >= 0 || countSlime() == 0) resultTime -= 1f / frameRate;
+  if(isInput("START") || resultTime <= 0f) {
     restart();
   }
 }
@@ -51,9 +56,9 @@ void buildObjects() {
 }
 
 void buildItem() {
-  if(random(100) < countSlime() * 2f)
+  if(random(frameRate * 4) < countSlime() * 1.5f)
   objects.add(new Item());
-  if(random(1000) < 1f)
+  if(random(frameRate * 40) < 1f)
   objects.add(new Item("ITEM_BIG", 16f, 1.4f));
 }
 
@@ -72,9 +77,56 @@ void DrawSystem() {
     pg.image(icon, 0, 0);
     pg.textSize(72);
     pg.textAlign(CENTER, CENTER);
-    pg.text(((winTeam() >= 0) ? "Win " + winTeam() : ""), WIDTH / 2f, HEIGHT / 2f);
+    pg.text(String.format("%.0f", timer), WIDTH / 2f, HEIGHT / 16f);
+    //Slime s = winSlime();
+    pg.text(((winTeam() >= 0) ? "Win " + winSlime().getTeamName() + " ": "")
+      , WIDTH / 2f, HEIGHT / 2f);
   pgClose(pg);
   
+  PImage slimeImage = icons.get("SLIME")[0];
+  for(int n = 0; n < teams.size(); n++) {
+    List<Slime> team = teams.get(n);
+    if(n * 2 - 1 <= teams.size() * 2) {
+      pgOpen(pg, new PVector(0, 64 * n));
+        pg.textAlign(LEFT, TOP);
+        pg.textSize(12);
+        pg.text((team.get(0)).getTeamName(), 0, 0);
+        pg.imageMode(CORNER);
+        for(int i = 0; i < team.size(); i++) {
+          Slime slime = team.get(i);
+          pg.tint((slime.isRemove()) ? color(32) : slime.getColor());
+          pg.image(slimeImage, slimeImage.width * i, 24);
+        }
+      pgClose(pg);
+    } else {
+      
+    }
+  }
+}
+
+List<List<Slime>> getTeamOfSlime() {
+  List<List<Slime>> teams = new ArrayList<List<Slime>>();
+  
+  for(Article a: objects) {
+    if(a instanceof Slime) {
+      Slime s = (Slime)a;
+      boolean isExist = false;
+      for(List<Slime> team: teams) {
+        if(team.size() != 0 && s.team == (team.get(0)).team) {
+          team.add(s);
+          isExist = true;
+          break;
+        }
+      }
+      if(isExist == false) {
+        List<Slime> newteam = new ArrayList<Slime>();
+        newteam.add(s);
+        teams.add(newteam);
+      }
+    }
+  }
+  
+  return teams;
 }
 
 int countSlime() {
@@ -93,8 +145,18 @@ int winTeam() {
     if(a instanceof Slime) {
       Slime s = (Slime)a;
       if(winteam == -1) winteam = s.getTeam();
-      else winteam = -2;
+      else if(winteam != s.getTeam()) winteam = -2;
     }
   }
   return winteam;
+}
+
+Slime winSlime() {
+  for(Article a: objects) {
+    if(a instanceof Slime) {
+      return (Slime)a;
+    }
+  }
+  
+  return null;
 }

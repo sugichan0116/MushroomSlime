@@ -7,7 +7,7 @@ class AutoSlime extends Slime {
   AutoSlime(int team) {
     super(team, "");
     movingTime = 0f;
-    targetTime = random(2.0f) + .8f;
+    targetTime = random(4.0f) + .2f;
     aggressiveEnergy = random(8.0f);
     String mode = "";
   }
@@ -31,11 +31,15 @@ class AutoSlime extends Slime {
       } else {
         mode = "";
         v = (new PVector(WIDTH / 2f, HEIGHT / 2f)).sub(r);
-        accuracy = .8f;
+        accuracy = .2f;
       }
       v.normalize().mult(velocity).rotate(TAU * (accuracy * -.5f + random(accuracy)));
       if(v.mag() <= 0f) v = new PVector(velocity, 0); 
     }
+  }
+  
+  String getTeamName() {
+    return "CPU" + team;
   }
   
   String getNature() {
@@ -68,7 +72,7 @@ class AutoSlime extends Slime {
   
   void selectCommand() {
     if(isMoving && !isEating && mode == "ATTACK") command("A");
-    command("X");
+    //command("X");
     command("Y");
   }
 }

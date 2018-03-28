@@ -68,7 +68,7 @@ class Slime extends Article{
       
       pg.tint(tintColor);
       pg.image(getImage(), i.x, i.y);
-      pg.text(((this.getClass() == AutoSlime.class) ? "[CPU]  " + ((AutoSlime)this).getNature() : "team" + team), 0, -size);
+      //pg.text(((this.getClass() == AutoSlime.class) ? "[CPU]  " + ((AutoSlime)this).getNature() : "team" + team), 0, -size);
       pg.noTint();
       
     pgClose(pg);
@@ -99,8 +99,6 @@ class Slime extends Article{
         pg.imageMode(CENTER);
         pg.image(gaugeImage, (w - h) * (-.5f + float(n) / 3f), size * -.5f);
       }
-      //pg.noClip();
-      //pg.imageMode(CENTER);
     pgClose(pg);
   }
   
@@ -138,6 +136,14 @@ class Slime extends Article{
   
   int getTeam() {
     return team;
+  }
+  
+  color getColor() {
+    return tintColor;
+  }
+  
+  String getTeamName() {
+    return inputPort + " " + ((controlID >= 0) ? controlID : "");
   }
   
   void setEating() {

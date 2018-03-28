@@ -22,6 +22,8 @@ ArrayList<Article> objects;
 /* system */
 int WIDTH;
 int HEIGHT;
+float timer, resultTime;
+List<List<Slime>> teams;
 KeyState keyState;
 ControlState controlState;
 
@@ -44,7 +46,6 @@ void setup() {
   size(960, 540, P2D);
   WIDTH = width;
   HEIGHT = height;
-  frameRate(30f);
   keyState = new KeyState();
   controlState = new ControlState(this);
   
@@ -78,15 +79,18 @@ void setup() {
 }
 
 void restart() {
+  timer = 0f;
+  resultTime = 3f;
   objects = new ArrayList<Article>();
-  //objects.add(new Slime(2, "ARROWS"));
-  objects.add(new Slime(0, "CONTROLLER", 0));
-  objects.add(new Slime(1, "CONTROLLER", 1));
-  //objects.add(new Slime(3, "KEYBOARD"));
-  objects.add(new AutoSlime(2));
-  objects.add(new AutoSlime(3));
+  objects.add(new Slime(0, "ARROWS"));
+  objects.add(new Slime(2, "CONTROLLER", 0));
+  objects.add(new Slime(3, "CONTROLLER", 1));
+  objects.add(new Slime(1, "KEYBOARD"));
+  objects.add(new AutoSlime(4));
+  objects.add(new AutoSlime(4));
   objects.add(new AutoSlime(4));
   objects.add(new AutoSlime(5));
-  objects.add(new AutoSlime(6));
-  objects.add(new AutoSlime(7));
+  objects.add(new AutoSlime(5));
+  objects.add(new AutoSlime(5));
+  teams = getTeamOfSlime();
 }
