@@ -73,10 +73,15 @@ void setup() {
   layers.put("MAIN", createGraphics(WIDTH, HEIGHT));
   layerDepth.put("MAIN", .0);
   
-  //test
+  restart();
+}
+
+void restart() {
   objects = new ArrayList<Article>();
-  objects.add(new Slime(0, "ARROWS"));
+  //objects.add(new Slime(0, "ARROWS"));
   objects.add(new Slime(1, "CONTROLLER"));
-  objects.add(new Slime(2, "KEYBOARD"));
-  objects.add(new AutoSlime());
+  //objects.add(new Slime(2, "KEYBOARD"));
+  objects.add(new AutoSlime(0));
+  objects.add(new AutoSlime(2));
+  objects.add(new AutoSlime(3));
 }

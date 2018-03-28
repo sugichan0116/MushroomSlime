@@ -57,7 +57,7 @@ class Item extends Article {
     if(temp instanceof Slime) {
       if(isRemove == false) {
           ((Slime)temp).setEating();
-          ((Slime)temp).addEnergy(getGrowth() * .25f);
+          ((Slime)temp).addEnergy(getGrowth() * .5f);
           v.add(temp.r).sub(r).mult(removeDelay);
       }
     }

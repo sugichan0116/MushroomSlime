@@ -14,18 +14,22 @@ class Slime extends Article{
   private final float maxEnergy = 8.0f; 
   private PImage gaugeImage;
   private float gaugeVisibleTime;
-  private final float gaugeMaxTime = 2.0f;
+  private final float gaugeMaxTime = 8.0f;
   private float shootCoolTime;
   private final float shootMaxTime = 0.2f;
   private float shieldPlayTime;
   private final float shieldCycleTime = 0.3f;
   
   Slime() {
-    this(int(random(4)) + 4, "ARROWS");
+    this(int(random(4)) + 4, "");
   }
   
   Slime(int team, String port) {
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
+    PVector locate = (new PVector(1f, 1f).rotate(PI * (1f + .5f * team)));
+    locate.x *= WIDTH;
+    locate.y *= HEIGHT;
+    r.add(locate.div(4f));
     size = 64f;
     playTime = 0f; cycleTime = 0.9f;
     velocity = speed;
@@ -162,15 +166,16 @@ class Slime extends Article{
   }
   
   void command(String button) {
+    if(isEating) return;
     float demandEnergy = 0f;
     PVector[] bullets = new PVector[0];
     if(button == "A") {
-      demandEnergy = 0.1f;
+      demandEnergy = 0.2f;
       bullets = new PVector[1];
       bullets[0] = (v.mag() < velocity) ? (new PVector(velocity, 0f)).rotate(getAngle()) : (new PVector(v.x, v.y).mult(2f));
     }
     if(button == "Y") {
-      demandEnergy = 2.0f;
+      demandEnergy = 1.0f;
       if(isShield == false && subEnergy(demandEnergy)) {
         isShield = true;
         gaugeVisibleTime = gaugeMaxTime;
@@ -178,10 +183,10 @@ class Slime extends Article{
       return;
     }
     if(button == "X") {
-      demandEnergy = 1.0f;
+      demandEnergy = 4.0f;
       bullets = new PVector[8];
       for(int n = 0; n < 8; n++) {
-        bullets[n] = (new PVector(velocity, 0f)).rotate(TAU * float(n) / 8f);
+        bullets[n] = (new PVector(velocity * 2f, 0f)).rotate(TAU * float(n) / 8f);
       }
     }
     if(button == "B") {
