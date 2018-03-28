@@ -2,6 +2,7 @@ class Slime extends Article{
   private String inputPort;
   private color tintColor;
   protected int team;
+  private int controlID;
   
   private boolean isDead, isShield;
   private float playTime, cycleTime;
@@ -23,10 +24,14 @@ class Slime extends Article{
   private final float ineffectiveCycleTime = .2f;
   
   Slime() {
-    this(int(random(4)) + 4, "");
+    this(-1, "");
   }
   
   Slime(int team, String port) {
+    this(team, port, -1);
+  }
+  
+  Slime(int team, String port, int controlID) {
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
     PVector locate = (new PVector(1f, 1f).rotate(PI * (1f + .5f * team)));
     locate.x *= WIDTH;
@@ -47,6 +52,7 @@ class Slime extends Article{
     this.team = team;
     shootCoolTime = 0f;
     ineffectiveTime = 0f;
+    this.controlID = controlID;
   }
   
   void setInputPort(String port) {
@@ -101,6 +107,7 @@ class Slime extends Article{
   void Update() {
     super.Update();
     
+    controlState.setControlID(controlID);
     playTimeForAnime();
     Move();
     selectCommand();
@@ -157,7 +164,7 @@ class Slime extends Article{
   }
   
   void selectCommand() {
-    velocity = speed;
+    velocity = speed; //後で治す
     
     if(isInput(inputPort, "A")) {
       command("A");

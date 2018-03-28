@@ -120,6 +120,7 @@ boolean isInput(String port, String code) {
     if(code == "B") return keyState.getKey('x');
     if(code == "X") return keyState.getCode('c');
     if(code == "Y") return keyState.getKey(' ');
+    if(code == "START") return keyState.getCode(DELETE);
   }
   
   if(port == "KEYBOARD") {
@@ -131,18 +132,19 @@ boolean isInput(String port, String code) {
     if(code == "B") return keyState.getKey('k');
     if(code == "X") return keyState.getKey('i');
     if(code == "Y") return keyState.getKey('j');
+    if(code == "START") return keyState.getCode(DELETE);
   }
   
   if(port == "CONTROLLER") {
-    if(code == "UP") return controlState.isArrow("UP");
-    if(code == "DOWN") return controlState.isArrow("DOWN");
-    if(code == "RIGHT") return controlState.isArrow("RIGHT");
-    if(code == "LEFT") return controlState.isArrow("LEFT");
+    if(code == "UP") return controlState.isDirection("UP");
+    if(code == "DOWN") return controlState.isDirection("DOWN");
+    if(code == "RIGHT") return controlState.isDirection("RIGHT");
+    if(code == "LEFT") return controlState.isDirection("LEFT");
     if(code == "A") return controlState.isButton("A") || controlState.isButton("L1");
     if(code == "B") return controlState.isButton("B") || controlState.isButton("L2");
     if(code == "X") return controlState.isButton("X") || controlState.isButton("R1");
     if(code == "Y") return controlState.isButton("Y") || controlState.isButton("R2");
-    
+    if(code == "START") return controlState.isButton("START");
   }
   
   if(code == "COMMAND") return isInput(port, "A") | isInput(port, "B") | isInput(port, "X") | isInput(port, "Y");
