@@ -30,6 +30,10 @@ class Bullet extends Article{
     return int(--frames * playTime / cycleTime);
   }
   
+  int getTeam() {
+    return team;
+  }
+  
   void Update() {
     super.Update();
     playTime += 1f / frameRate;

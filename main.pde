@@ -85,12 +85,14 @@ void DrawSystem() {
   
   PImage slimeImage = icons.get("SLIME")[0];
   for(int n = 0; n < teams.size(); n++) {
-    List<Slime> team = teams.get(n);
+    Team team = teams.get(n);
     if(n * 2 - 1 <= teams.size() * 2) {
       pgOpen(pg, new PVector(0, 64 * n));
         pg.textAlign(LEFT, TOP);
         pg.textSize(12);
-        pg.text((team.get(0)).getTeamName(), 0, 0);
+        pg.text(team.getTeamName(), 0, 0);
+        pg.textSize(10);
+        pg.text("kill " + team.getKill(), 0, 12);
         pg.imageMode(CORNER);
         for(int i = 0; i < team.size(); i++) {
           Slime slime = team.get(i);
@@ -104,14 +106,14 @@ void DrawSystem() {
   }
 }
 
-List<List<Slime>> getTeamOfSlime() {
-  List<List<Slime>> teams = new ArrayList<List<Slime>>();
+List<Team> getTeams() {
+  List<Team> teams = new ArrayList<Team>();
   
   for(Article a: objects) {
     if(a instanceof Slime) {
       Slime s = (Slime)a;
       boolean isExist = false;
-      for(List<Slime> team: teams) {
+      for(Team team: teams) {
         if(team.size() != 0 && s.team == (team.get(0)).team) {
           team.add(s);
           isExist = true;
@@ -119,7 +121,7 @@ List<List<Slime>> getTeamOfSlime() {
         }
       }
       if(isExist == false) {
-        List<Slime> newteam = new ArrayList<Slime>();
+        Team newteam = new Team();
         newteam.add(s);
         teams.add(newteam);
       }

@@ -23,7 +23,7 @@ ArrayList<Article> objects;
 int WIDTH;
 int HEIGHT;
 float timer, resultTime;
-List<List<Slime>> teams;
+List<Team> teams;
 KeyState keyState;
 ControlState controlState;
 
@@ -92,5 +92,5 @@ void restart() {
   objects.add(new AutoSlime(5));
   objects.add(new AutoSlime(5));
   objects.add(new AutoSlime(5));
-  teams = getTeamOfSlime();
+  teams = getTeams();
 }

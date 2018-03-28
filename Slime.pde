@@ -126,7 +126,14 @@ class Slime extends Article{
         isShield = false;
         ineffectiveTime = ineffectiveCycleTime;
       }
-      else isDead = true;
+      else {
+        for(Team team: teams) {
+          if(team.getID() == ((Bullet)temp).getTeam()) {
+            team.killed();
+          }
+        }
+        isDead = true;
+      }
     }
   }
   
