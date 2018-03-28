@@ -15,7 +15,7 @@ class AutoSlime extends Slime {
     if(targetTime <= movingTime || v.mag() <= 0f) {
       movingTime = 0f;
       float accuracy;
-      if(energy > 2f) {
+      if(energy > 2f || target != null) {
         v = target.copy().sub(r);
         accuracy = .1f;
       } else {

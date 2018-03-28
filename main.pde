@@ -38,10 +38,10 @@ void Update() {
   //build
   buildObjects();
   
-  //controlState.stateLog();
+  controlState.stateLog();
   keyState.Update();
   
-  if(keyState.getCode(DELETE) || controlState.isButton(8)) {
+  if(keyState.getCode(DELETE) || controlState.isButton("START")) {
     restart();
   }
 }

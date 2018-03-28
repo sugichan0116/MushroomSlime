@@ -118,7 +118,7 @@ boolean isInput(String port, String code) {
     if(code == "LEFT") return keyState.getCode(LEFT);
     if(code == "A") return keyState.getKey('z');
     if(code == "B") return keyState.getKey('x');
-    if(code == "X") return keyState.getCode(SHIFT);
+    if(code == "X") return keyState.getCode('c');
     if(code == "Y") return keyState.getKey(' ');
   }
   
@@ -138,10 +138,10 @@ boolean isInput(String port, String code) {
     if(code == "DOWN") return controlState.isArrow("DOWN");
     if(code == "RIGHT") return controlState.isArrow("RIGHT");
     if(code == "LEFT") return controlState.isArrow("LEFT");
-    if(code == "A") return controlState.isButton(1) || controlState.isButton(6);
-    if(code == "B") return controlState.isButton(2) || controlState.isButton(4);
-    if(code == "X") return controlState.isButton(0) || controlState.isButton(7);
-    if(code == "Y") return controlState.isButton(3) || controlState.isButton(5);
+    if(code == "A") return controlState.isButton("A") || controlState.isButton("L1");
+    if(code == "B") return controlState.isButton("B") || controlState.isButton("L2");
+    if(code == "X") return controlState.isButton("X") || controlState.isButton("R1");
+    if(code == "Y") return controlState.isButton("Y") || controlState.isButton("R2");
     
   }
   
