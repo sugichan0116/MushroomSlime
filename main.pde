@@ -40,6 +40,10 @@ void Update() {
   
   //controlState.stateLog();
   keyState.Update();
+  
+  if(keyState.getCode(DELETE) || controlState.isButton(8)) {
+    restart();
+  }
 }
 
 void buildObjects() {
@@ -47,7 +51,7 @@ void buildObjects() {
 }
 
 void buildItem() {
-  if(random(100) < 1f)
+  if(random(100) < 8f)
   objects.add(new Item());
 }
 
