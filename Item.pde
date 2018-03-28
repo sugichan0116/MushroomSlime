@@ -2,16 +2,24 @@ class Item extends Article {
   private boolean isRemove;
   private float removingTime;
   private final float removeDelay = 0.5f;
-  private float growthTime;
-  private final float ripeTime = 4f;
+  private float growthTime, growthSize;
+  private float ripeTime;
+  private PImage[] tiles;
   
   Item() {
+    this("ITEM", 4f, .5f);
+  }
+  
+  Item(String name, float ripe, float food) {
     r = new PVector(random(1f), 0f);
     r.rotate(random(TAU));
     r.x *= WIDTH;
     r.y *= HEIGHT;
     r.div(3f).add(WIDTH * .5f, HEIGHT * .6f);
     
+    growthSize = food;
+    ripeTime = ripe;
+    tiles = icons.get(name);
     size = 32f;
     isRemove = false;
     removingTime = growthTime = 0f;
@@ -25,7 +33,6 @@ class Item extends Article {
   }
   
   private PImage getImage() {
-    PImage[] tiles = icons.get("ITEM");
     return tiles[getFrame(tiles.length)];
   }
   
@@ -34,7 +41,7 @@ class Item extends Article {
   }
   
   private int getGrowth() {
-    return getFrame((icons.get("ITEM")).length) + 1;
+    return getFrame(tiles.length) + 1;
   }
   
   void Update() {
@@ -57,7 +64,7 @@ class Item extends Article {
     if(temp instanceof Slime) {
       if(isRemove == false) {
           ((Slime)temp).setEating();
-          ((Slime)temp).addEnergy(getGrowth() * .5f);
+          ((Slime)temp).addEnergy(getGrowth() * growthSize);
           v.add(temp.r).sub(r).mult(removeDelay);
       }
     }

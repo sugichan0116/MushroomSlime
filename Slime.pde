@@ -1,7 +1,7 @@
 class Slime extends Article{
   private String inputPort;
   private color tintColor;
-  private int team;
+  protected int team;
   
   private boolean isDead, isShield;
   private float playTime, cycleTime;
@@ -10,7 +10,7 @@ class Slime extends Article{
   private String direction;
   protected boolean isMoving, isEating;
   private int initFrame;
-  private float energy;
+  protected float energy;
   private final float maxEnergy = 8.0f; 
   private PImage gaugeImage;
   private float gaugeVisibleTime;
@@ -19,6 +19,8 @@ class Slime extends Article{
   private final float shootMaxTime = 0.2f;
   private float shieldPlayTime;
   private final float shieldCycleTime = 0.3f;
+  private float ineffectiveTime;
+  private final float ineffectiveCycleTime = .2f;
   
   Slime() {
     this(int(random(4)) + 4, "");
@@ -44,6 +46,7 @@ class Slime extends Article{
     isDead = isShield = false;
     this.team = team;
     shootCoolTime = 0f;
+    ineffectiveTime = 0f;
   }
   
   void setInputPort(String port) {
@@ -105,14 +108,19 @@ class Slime extends Article{
     ResistLocate();
     if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
     if(shootCoolTime > 0f) shootCoolTime -= 1f / frameRate;
+    if(ineffectiveTime > 0f) ineffectiveTime -= 1f / frameRate;
     shieldPlayTime += 1f / frameRate;
     shieldPlayTime %= shieldCycleTime;
+    
   }
   
   void collide(Article temp) {
     if(temp instanceof Bullet) {
-      //println("* You Dead!");
-      if(isShield) isShield = false;
+      if(ineffectiveTime > 0f) return;
+      if(isShield) {
+        isShield = false;
+        ineffectiveTime = ineffectiveCycleTime;
+      }
       else isDead = true;
     }
   }

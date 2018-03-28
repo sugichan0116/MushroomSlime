@@ -59,6 +59,7 @@ void setup() {
   icons.put("BULLET", sliceImage("acidbullet.png", 16, 16, 1, 1));
   icons.put("SHIELD", sliceImage("shield.png", 32, 32, 3, 3));
   icons.put("ITEM", sliceImage("mushroom.png", 16, 16, 2, 2));
+  icons.put("ITEM_BIG", sliceImage("bigmushroom.png", 32, 32, 2, 2));
   icons.put("GAUSE", sliceImage("mushroom.png", 16, 16));
   icons.put("FRAME_FRONT", sliceImage("grassland_d.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_BACK", sliceImage("grassland_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));
@@ -78,9 +79,9 @@ void setup() {
 
 void restart() {
   objects = new ArrayList<Article>();
-  //objects.add(new Slime(0, "ARROWS"));
+  objects.add(new Slime(0, "ARROWS"));
   objects.add(new Slime(1, "CONTROLLER"));
-  //objects.add(new Slime(2, "KEYBOARD"));
+  objects.add(new Slime(2, "KEYBOARD"));
   objects.add(new AutoSlime(0));
   objects.add(new AutoSlime(2));
   objects.add(new AutoSlime(3));
