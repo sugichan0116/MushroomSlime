@@ -1,4 +1,3 @@
-
 /* library */
 import java.util.HashMap;
 import java.util.Map;
@@ -8,35 +7,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import ddf.minim.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-
-/* game arrays */
-//オブジェクト管理
-//test
-//オブジェクト管理
+/* for game */
 ArrayList<Article> objects;
-
-/* system */
-int WIDTH;
-int HEIGHT;
 float timer, resultTime;
 List<Team> teams;
+
+/* system */
+//window
+int WIDTH;
+int HEIGHT;
+//input
 KeyState keyState;
 ControlState controlState;
-
-/* materials */
-//icon配列
+//icon
 Map<String, PImage[]> icons;
 //layer
 Map<String, PGraphics> layers;
 Map<String, Float> layerDepth;
-
 //sound
-Minim minim;
-Map<String, AudioPlayer> sounds;
+Sound sound;
 
 
 void setup() {
@@ -48,6 +40,10 @@ void setup() {
   HEIGHT = height;
   keyState = new KeyState();
   controlState = new ControlState(this);
+  sound = new Sound(this);
+  
+  println("* sound loading...");
+  sound.put("BGM_WATER", "water_land.mp3", 1f, 0, true);
   
   println("* image loading...");
   icons = new HashMap<String, PImage[]>();

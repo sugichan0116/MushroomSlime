@@ -4,6 +4,11 @@ void draw() {
   Draw();
 }
 
+void stop() {
+  sound.Stop();
+  super.stop();
+}
+
 void Draw() {
   //init -> draw -> flip
   DrawInit();
@@ -41,8 +46,10 @@ void Update() {
   //build
   buildObjects();
   
-  controlState.stateLog();
+  //controlState.stateLog();
   keyState.Update();
+  
+  sound.play("BGM_WATER");
   
   timer += 1f / frameRate;
   if(winTeam() >= 0 || countSlime() == 0) resultTime -= 1f / frameRate;
