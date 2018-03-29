@@ -41,7 +41,7 @@ void Update() {
   //build
   buildObjects();
   
-  //controlState.stateLog();
+  controlState.stateLog();
   keyState.Update();
   
   timer += 1f / frameRate;

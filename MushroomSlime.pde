@@ -85,8 +85,8 @@ void restart() {
   timer = 0f;
   resultTime = 3f;
   objects = new ArrayList<Article>();
-  objects.add(new Slime(0, "ARROWS"));
-  objects.add(new Slime(0, "KEYBOARD"));
+  //objects.add(new Slime(0, "ARROWS"));
+  //objects.add(new Slime(0, "KEYBOARD"));
   objects.add(new Slime(1, "CONTROLLER", 0));
   objects.add(new Slime(2, "CONTROLLER", 1));
   objects.add(new Slime(3, "CONTROLLER", 2));

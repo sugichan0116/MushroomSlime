@@ -6,7 +6,7 @@ public class ControlState
   private ControlIO control;
   private List<ControlDevice> devices;
   private final String[] deviceName = 
-  { "ELECOM JC-PS202U series", "4Axes 16Key GamePad"};
+  { "ELECOM JC-PS202U series", "4Axes 16Key GamePad", "JC-PS102U"};
   
   private ControlButton[][] buttons;
   private ControlSlider[][] sliders;
@@ -132,6 +132,21 @@ public class ControlState
       if(name == "HAT") return isButton(0);
       if(name == "SELECT") return isButton(9);
       if(name == "START") return isButton(10);
+    }
+    if(getDevice().getName().equals("JC-PS102U")) {
+      if(name == "A") return isButton(1);
+      if(name == "B") return isButton(2);
+      if(name == "X") return isButton(0);
+      if(name == "Y") return isButton(3);
+      if(name == "R1") return isButton(7);
+      if(name == "R2") return isButton(5);
+      if(name == "R3") return isButton(11);
+      if(name == "L1") return isButton(6);
+      if(name == "L2") return isButton(4);
+      if(name == "L3") return isButton(10);
+      if(name == "HAT") return isButton(12);
+      if(name == "SELECT") return isButton(9);
+      if(name == "START") return isButton(8);
     }
     return false;
   }

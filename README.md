@@ -16,4 +16,5 @@
 
 * PS2 Con + "ELECOM JC-PS202U series"
 * PS2 Con + "4Axes 16Key GamePad"
+* PS2 Con + "JC-PS102U"
 * keyboard

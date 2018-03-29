@@ -42,7 +42,6 @@ class Bullet extends Article{
   
   boolean isCollide(Article temp) {
     if(temp instanceof Slime){
-      //println("* " + (((Slime)temp).getTeam() != team) + " | " + team + ", " + ((Slime)temp).getTeam());
       if(((Slime)temp).getTeam() != team) {
         if(dist(temp.r, r) <= temp.size) {
           return super.isCollide(temp);
