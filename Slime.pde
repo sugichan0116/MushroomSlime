@@ -130,6 +130,7 @@ class Slime extends Article{
       if(ineffectiveTime > 0f) return;
       if(isShield) {
         isShield = false;
+        sounds.play("SHIELD_CLOSE");
         ineffectiveTime = ineffectiveCycleTime;
       }
       else {
@@ -167,6 +168,7 @@ class Slime extends Article{
     isEating = true;
     setNowFrame(initFrame + 1);
     gaugeVisibleTime = gaugeMaxTime;
+    sounds.play("EAT");
   }
   
   void setAwakening(int level) {
@@ -222,6 +224,7 @@ class Slime extends Article{
       if(isShield == false && subEnergy(demandEnergy)) {
         isShield = true;
         gaugeVisibleTime = gaugeMaxTime;
+        sounds.play("SHIELD_OPEN");
       }
       return;
     }
@@ -255,6 +258,7 @@ class Slime extends Article{
     }
     
     if(shootCoolTime <= 0f && subEnergy(demandEnergy)) {
+      sounds.play("SHOOT");
       shootCoolTime = shootMaxTime;
       gaugeVisibleTime = gaugeMaxTime;
       for(int n = 0; n < bullets.length; n++) {

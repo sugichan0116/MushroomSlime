@@ -28,7 +28,7 @@ Map<String, PImage[]> icons;
 Map<String, PGraphics> layers;
 Map<String, Float> layerDepth;
 //sound
-Sound sound;
+Sound sounds;
 
 
 void setup() {
@@ -40,10 +40,16 @@ void setup() {
   HEIGHT = height;
   keyState = new KeyState();
   controlState = new ControlState(this);
-  sound = new Sound(this);
+  sounds = new Sound(this);
   
   println("* sound loading...");
-  sound.put("BGM_WATER", "water_land.mp3", 1f, 0, true);
+  sounds.put("BGM_WATER", sounds.create("water_land.mp3").isLoop(true));
+  sounds.put("BGM_CRY", sounds.create("montanus_cry.mp3").isLoop(true));
+  sounds.put("EAT", sounds.create("eat.mp3"));
+  sounds.put("SHOOT", sounds.create("shoot.mp3"));
+  sounds.put("WALK", sounds.create("slime.mp3"));
+  sounds.put("SHIELD_OPEN", sounds.create("shield_open.mp3"));
+  sounds.put("SHIELD_CLOSE", sounds.create("shield_close.mp3"));
   
   println("* image loading...");
   icons = new HashMap<String, PImage[]>();
@@ -79,26 +85,15 @@ void restart() {
   timer = 0f;
   resultTime = 3f;
   objects = new ArrayList<Article>();
-  //objects.add(new Slime(0, "ARROWS"));
-  //objects.add(new Slime(0, "KEYBOARD"));
-  //objects.add(new Slime(1, "CONTROLLER", 0));
-  //objects.add(new Slime(2, "CONTROLLER", 1));
-  //objects.add(new Slime(3, "CONTROLLER", 2));
+  objects.add(new Slime(0, "ARROWS"));
+  objects.add(new Slime(0, "KEYBOARD"));
+  objects.add(new Slime(1, "CONTROLLER", 0));
+  objects.add(new Slime(2, "CONTROLLER", 1));
+  objects.add(new Slime(3, "CONTROLLER", 2));
   objects.add(new AutoSlime(4));
   objects.add(new AutoSlime(4));
   objects.add(new AutoSlime(4));
   objects.add(new AutoSlime(4));
-  objects.add(new AutoSlime(5));
-  objects.add(new AutoSlime(5));
-  objects.add(new AutoSlime(5));
-  objects.add(new AutoSlime(5));
-  objects.add(new AutoSlime(6));
-  objects.add(new AutoSlime(6));
-  objects.add(new AutoSlime(6));
-  objects.add(new AutoSlime(6));
-  objects.add(new AutoSlime(7));
-  objects.add(new AutoSlime(7));
-  objects.add(new AutoSlime(7));
-  objects.add(new AutoSlime(7));
   teams = getTeams();
+  sounds.play("BGM_WATER");
 }

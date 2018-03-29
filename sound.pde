@@ -1,69 +1,91 @@
 import processing.sound.*;
 
+class SoundData {
+  SoundFile s;
+  float volume;
+  float cue;
+  float rate;
+  boolean isLoop;
+  
+  SoundData(PApplet p, String path) {
+    s = new SoundFile(p, path);
+    volume = 1f;
+    cue = 0f;
+    rate = 1f;
+    isLoop = false;
+  }
+  
+  SoundData play(float master) {
+    if(isLoop) s.loop();
+    else s.play();
+    s.amp(volume * master);
+    s.rate(rate);
+    s.cue(cue);
+    return this;
+  }
+  
+  SoundData stop() {
+    s.stop();
+    return this;
+  }
+  
+  SoundData volume(float amp) {
+    volume = amp;
+    return this;
+  }
+  
+  SoundData cue(float cue) {
+    this.cue = cue;
+    return this;
+  }
+  
+  SoundData rate(float rate) {
+    this.rate = rate;
+    return this;
+  }
+  
+  SoundData isLoop(boolean loop) {
+    isLoop = loop;
+    return this;
+  }
+}
+
 class Sound {
-  float masterVolume;
-  HashMap<String, SoundFile> list;
-  HashMap<String, Float> volumes;
-  HashMap<String, Integer> cues;
-  HashMap<String, Boolean> isLoops;
+  private float masterVolume;
+  private HashMap<String, SoundData> list;
+  private PApplet applet;
   
   Sound(PApplet p) {
     Init(p);
   }
   
   Sound Init(PApplet p) {
-    minim = new Minim(p);
-    list = new HashMap<String, AudioPlayer>();
-    volumes = new HashMap<String, Float>();
-    cues = new HashMap<String, Integer>();
-    isLoops = new HashMap<String, Boolean>();
-    masterVolume = .1f;
+    applet = p;
+    list = new HashMap<String, SoundData>();
+    masterVolume = 1.f;
     return this;
   }
   
-  private Sound put(String Key, AudioPlayer a, float volume, int millis, boolean isLoop) {
-    if(a != null) {
-      list.put(Key, a);
-      volumes.put(Key, volume);
-      cues.put(Key, millis);
-      isLoops.put(Key, isLoop);
+  SoundData create(String path) {
+    return new SoundData(applet, path);
+  }
+  
+  void put(String Key, SoundData s) {
+    list.put(Key, s);
+  }
+  
+  void play(String Key) {
+    SoundData s = list.get(Key);
+    if(s != null) {
+      s.play(masterVolume);
     }
-    return this;
   }
   
-  Sound put(String Key, String path) {
-    put(Key, minim.loadFile(path), 1f, 0, false);
-    return this;
-  }
-  
-  Sound put(String Key, String path, float volume, int millis, boolean isLoop) {
-    put(Key, minim.loadFile(path), volume, millis, isLoop);
-    return this;
-  }
-  
-  void Stop() {
-    for(AudioPlayer a: list.values()) {
-      a.close();
+  void stop(String Key) {
+    SoundData s = list.get(Key);
+    if(s != null) {
+      s.stop();
     }
-    minim.stop();
   }
   
-  boolean isPlaying(String Key) {
-    AudioPlayer a = list.get(Key);
-    if(a != null) {
-      return a.isPlaying();
-    }
-    return false;
-  }
-  
-  Sound play(String Key) {
-    AudioPlayer a = list.get(Key);
-    if(a != null) {
-      if(isPlaying(Key) && isLoops.get(Key)) return this;
-      println("* " + volumes.get(Key) * masterVolume + ", " + a.getVolume());
-      a.setVolume(volumes.get(Key) * masterVolume);
-      a.play(cues.get(Key));
-    }
-    return this;
-  }
 }
