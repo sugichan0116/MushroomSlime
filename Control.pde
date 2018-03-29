@@ -23,7 +23,7 @@ public class ControlState
     devices = new ArrayList<ControlDevice>();
     for(ControlDevice c: deviceList) {
       for(String n: deviceName) {
-        if(c.getName().equals(n)) devices.add(control.getDevice(n));
+        if(c.getName().equals(n)) devices.add(c);
       }
     }
     

@@ -50,7 +50,7 @@ class AutoSlime extends Slime {
     if(energy >= aggressiveEnergy) {
       if(temp instanceof Slime) {
         Slime s = (Slime)temp;
-        if(s.team != team) {
+        if(s.getTeam() != getTeam()) {
           if(target == null || dist(r, target) > dist(r, s.r)) {
             target = s.r;
           }

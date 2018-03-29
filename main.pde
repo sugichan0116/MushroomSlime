@@ -56,7 +56,7 @@ void buildObjects() {
 }
 
 void buildItem() {
-  if(random(frameRate * 4) < countSlime() * 1.5f)
+  if(random(frameRate * 4) < countSlime() * 1f)
   objects.add(new Item());
   if(random(frameRate * 40) < 1f)
   objects.add(new Item("ITEM_BIG", 16f, 1.4f));
@@ -75,9 +75,12 @@ void DrawSystem() {
   pgOpen(pg);
     icon = (icons.get("FRAME_FRONT"))[0];
     pg.image(icon, 0, 0);
-    pg.textSize(72);
+    pg.imageMode(CENTER);
+    icon = (icons.get("FRAME_TIME"))[0];
+    pg.image(icon, WIDTH / 2f, icon.height / 2f);
+    pg.textSize(48);
     pg.textAlign(CENTER, CENTER);
-    pg.text(String.format("%.0f", timer), WIDTH / 2f, HEIGHT / 16f);
+    pg.text(String.format("%.0f", timer), WIDTH / 2f, 40);
     //Slime s = winSlime();
     pg.text(((winTeam() >= 0) ? "Win " + winSlime().getTeamName() + " ": "")
       , WIDTH / 2f, HEIGHT / 2f);
