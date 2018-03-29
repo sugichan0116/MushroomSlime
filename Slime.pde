@@ -22,6 +22,8 @@ class Slime extends Article{
   private final float shieldCycleTime = 0.3f;
   private float ineffectiveTime;
   private final float ineffectiveCycleTime = .2f;
+  private float awakeningTime;
+  private final float awakeningRate = 2.0f;
   
   Slime() {
     this(-1, "");
@@ -45,14 +47,18 @@ class Slime extends Article{
     initFrame = 0;
     energy = 0f;
     setInputPort(port);
-    tintColor = color(random(128) + 128, random(128) + 128, random(128) + 128);
-    gaugeImage = icons.get("GAUSE")[3];
+    tintColor = getRandomColor();
+    gaugeImage = icons.get("GAUGE")[3];
     gaugeVisibleTime = 0f;
     isDead = isShield = false;
     this.team = team;
     shootCoolTime = 0f;
     ineffectiveTime = 0f;
     this.controlID = controlID;
+  }
+  
+  protected color getRandomColor() {
+    return color(random(128) + 128, random(128) + 128, random(128) + 128);
   }
   
   void setInputPort(String port) {
@@ -66,9 +72,8 @@ class Slime extends Article{
       if(isMoving && !isEating) i.rotate(getAngle());
       else i.set(0f, 0f);
       
-      pg.tint(tintColor);
+      pg.tint((isAwakening()) ? getRandomColor() : tintColor);
       pg.image(getImage(), i.x, i.y);
-      //pg.text(((this.getClass() == AutoSlime.class) ? "[CPU]  " + ((AutoSlime)this).getNature() : "team" + team), 0, -size);
       pg.noTint();
       
     pgClose(pg);
@@ -114,6 +119,7 @@ class Slime extends Article{
     if(gaugeVisibleTime > 0f) gaugeVisibleTime -= 1f / frameRate;
     if(shootCoolTime > 0f) shootCoolTime -= 1f / frameRate;
     if(ineffectiveTime > 0f) ineffectiveTime -= 1f / frameRate;
+    if(isAwakening()) awakeningTime -= 1f / frameRate;
     shieldPlayTime += 1f / frameRate;
     shieldPlayTime %= shieldCycleTime;
     
@@ -141,6 +147,10 @@ class Slime extends Article{
     return isDead;
   }
   
+  protected boolean isAwakening() {
+    return awakeningTime > 0f;
+  }
+  
   int getTeam() {
     return team;
   }
@@ -157,6 +167,11 @@ class Slime extends Article{
     isEating = true;
     setNowFrame(initFrame + 1);
     gaugeVisibleTime = gaugeMaxTime;
+  }
+  
+  void setAwakening(int level) {
+    if(!isAwakening()) awakeningTime = 0f;
+    awakeningTime += level * awakeningRate;
   }
   
   boolean addEnergy(float num) {
@@ -224,6 +239,19 @@ class Slime extends Article{
         gaugeVisibleTime = gaugeMaxTime;
       }
       return;
+    }
+    
+    if(isAwakening()) {
+      int split = 3;
+      PVector[] newBullets = new PVector[split * bullets.length];
+      int i = 0;
+      for(PVector b: bullets) {
+        for(int n = 0; n < split; n++) {
+          newBullets[i] = b.copy().rotate(radians(10) * (n - floor(split / 2f)));
+          i++;
+        }
+      }
+      bullets = newBullets;
     }
     
     if(shootCoolTime <= 0f && subEnergy(demandEnergy)) {

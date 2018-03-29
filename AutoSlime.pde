@@ -22,7 +22,7 @@ class AutoSlime extends Slime {
       float accuracy = 0f;
       if(target != null && mode != "EAT") {
         v = target.copy().sub(r);
-        if(energy >= aggressiveEnergy) {
+        if(isAttack()) {
           accuracy = .0f;
           mode = "ATTACK";
         } else {
@@ -38,6 +38,10 @@ class AutoSlime extends Slime {
     }
   }
   
+  private boolean isAttack() {
+    return energy >= aggressiveEnergy;
+  }
+  
   String getTeamName() {
     return "CPU" + team;
   }
@@ -47,7 +51,7 @@ class AutoSlime extends Slime {
   }
   
   boolean isCollide(Article temp) {
-    if(energy >= aggressiveEnergy) {
+    if(isAttack()) {
       if(temp instanceof Slime) {
         Slime s = (Slime)temp;
         if(s.getTeam() != getTeam()) {
@@ -71,7 +75,7 @@ class AutoSlime extends Slime {
   }
   
   void selectCommand() {
-    if(isMoving && !isEating && mode == "ATTACK") command("A");
+    if(isMoving && !isEating && (mode == "ATTACK" || isAwakening())) command("A");
     //command("X");
     command("Y");
   }

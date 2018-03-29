@@ -59,7 +59,7 @@ void buildItem() {
   if(random(frameRate * 4) < countSlime() * 1f)
   objects.add(new Item());
   if(random(frameRate * 40) < 1f)
-  objects.add(new Item("ITEM_BIG", 16f, 1.4f));
+  objects.add(new Item("ITEM_BIG", 16f, 1.4f, true));
 }
 
 void DrawSystem() {
