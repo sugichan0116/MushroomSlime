@@ -12,7 +12,7 @@ import java.awt.event.ComponentEvent;
 
 /* for game */
 ArrayList<Article> objects;
-float timer, resultTime;
+Manager manager;
 List<Team> teams;
 
 /* system */
@@ -40,9 +40,11 @@ void setup() {
   HEIGHT = height;
   keyState = new KeyState();
   controlState = new ControlState(this);
-  sounds = new Sound(this);
+  manager = new Manager();
+  objects = new ArrayList<Article>();
   
   println("* sound loading...");
+  sounds = new Sound(this);
   sounds.put("BGM_WATER", sounds.create("water_land.mp3").isLoop(true));
   sounds.put("BGM_CRY", sounds.create("montanus_cry.mp3").isLoop(true));
   sounds.put("EAT", sounds.create("eat.mp3"));
@@ -64,6 +66,7 @@ void setup() {
   icons.put("ITEM", sliceImage("mushroom.png", 16, 16, 2, 2));
   icons.put("ITEM_BIG", sliceImage("bigmushroom.png", 32, 32, 2, 2));
   icons.put("GAUGE", sliceImage("mushroom.png", 16, 16));
+  icons.put("FRAME_MENU", sliceImage("titlelogo.png", 108, 72, 4, 4));
   icons.put("FRAME_FRONT", sliceImage("grassland_d.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_TIME", sliceImage("signboard.png", 64, 32, 4, 3));
   icons.put("FRAME_BACK", sliceImage("grassland_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));
@@ -77,23 +80,4 @@ void setup() {
   layerDepth.put("BACK", 1.);
   layers.put("MAIN", createGraphics(WIDTH, HEIGHT));
   layerDepth.put("MAIN", .0);
-  
-  restart();
-}
-
-void restart() {
-  timer = 0f;
-  resultTime = 3f;
-  objects = new ArrayList<Article>();
-  //objects.add(new Slime(0, "ARROWS"));
-  //objects.add(new Slime(0, "KEYBOARD"));
-  objects.add(new Slime(1, "CONTROLLER", 0));
-  objects.add(new Slime(2, "CONTROLLER", 1));
-  objects.add(new Slime(3, "CONTROLLER", 2));
-  objects.add(new AutoSlime(4));
-  objects.add(new AutoSlime(4));
-  objects.add(new AutoSlime(4));
-  objects.add(new AutoSlime(4));
-  teams = getTeams();
-  sounds.play("BGM_WATER");
 }
