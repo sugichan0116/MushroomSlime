@@ -62,9 +62,11 @@ class Manager {
         icon = (icons.get("FRAME_TIME"))[0];
         pg.image(icon, 0f, icon.height / 2f);
         pg.textSize(48);
-        pg.fill(#FFE2AD);
         pg.textAlign(CENTER, CENTER);
-        pg.text(String.format("%.0f", timer), 0f, 40);
+        pg.fill(#715012);
+        pg.text(String.format("%.0f", timer), -1, 40 - 1);
+        pg.fill(#FFE2AD);
+        pg.text(String.format("%.0f", timer), 0, 40);
         if(winTeamID() >= 0) {
           icon = (icons.get("JUDGE_WIN"))[0];
           PVector v;
@@ -78,7 +80,7 @@ class Manager {
           for(int n = 0; n < t.size(); n++) {
             v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .6f);
             pg.tint(color(32));
-            pg.image(icon, v.x + 4, v.y + 4);
+            pg.image(icon, v.x + 2, v.y + 2);
             pg.tint(t.get(n).getColor());
             pg.image(icon, v.x, v.y);
           }

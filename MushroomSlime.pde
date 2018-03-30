@@ -67,8 +67,8 @@ void setup() {
   icons.put("ITEM", sliceImage("mushroom.png", 16, 16, 2, 2));
   icons.put("ITEM_BIG", sliceImage("bigmushroom.png", 32, 32, 2, 2));
   icons.put("GAUGE", sliceImage("mushroom.png", 16, 16));
-  icons.put("JUDGE_WIN", sliceImage("win.png", 72, 32, 4, 4));
-  icons.put("JUDGE_DRAW", sliceImage("draw.png", 96, 32, 4, 4));
+  icons.put("JUDGE_WIN", sliceImage("win.png", 72, 32, 3, 3));
+  icons.put("JUDGE_DRAW", sliceImage("draw.png", 96, 32, 3, 3));
   icons.put("FRAME_MENU", sliceImage("titlelogo.png", 108, 72, 4, 4));
   icons.put("FRAME_FRONT", sliceImage("grassland_d.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_TIME", sliceImage("signboard.png", 64, 32, 4, 3));
