@@ -1,5 +1,6 @@
 # Mushroom Slime
 
+![title](title.png)
 ![ss](ss.png)
 
 ( ._ .) < Hello!
