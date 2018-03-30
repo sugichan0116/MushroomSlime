@@ -1,24 +1,23 @@
 class Manager {
   String scene;
   float timer, resultTime;
+  color[] colors;
   
   Manager() {
     scene = "MENU";
+    colors = new color[]{#FF6262, #79F0ED, #FBFF1A, #52FF65};
   }
   
   void restart() {
     timer = 0f;
     resultTime = 3f;
     objects = new ArrayList<Article>();
-    //objects.add(new Slime(0, "ARROWS"));
-    //objects.add(new Slime(0, "KEYBOARD"));
-    objects.add(new Slime(1, "CONTROLLER", 0));
-    objects.add(new Slime(2, "CONTROLLER", 1));
-    objects.add(new Slime(3, "CONTROLLER", 2));
-    objects.add(new AutoSlime(4));
-    objects.add(new AutoSlime(4));
-    objects.add(new AutoSlime(4));
-    objects.add(new AutoSlime(4));
+    objects.add(new Slime(0, colors, "ARROWS"));
+    objects.add(new Slime(0, colors, "CONTROLLER", 0));
+    objects.add(new Slime(0, colors, "CONTROLLER", 1));
+    objects.add(new Slime(1, colors, "CONTROLLER", 2));
+    objects.add(new Slime(2, colors, "CONTROLLER", 3));
+    objects.add(new AutoSlime(3, colors));
     teams = getTeams();
     sounds.play("BGM_WATER");
   }
@@ -27,7 +26,7 @@ class Manager {
     if(timer > 4f) scene = "FIGHT";
     
     timer += 1f / frameRate;
-    if(winTeam() >= 0 || countSlime() == 0) resultTime -= 1f / frameRate;
+    if(winTeamID() >= 0 || countSlime() == 0) resultTime -= 1f / frameRate;
     if(isInput("START") || resultTime <= 0f) {
       restart();
     }
@@ -58,15 +57,40 @@ class Manager {
     }
     
     if(scene == "FIGHT") {
-      pgOpen(pg);
+      pgOpen(pg, new PVector(WIDTH / 2f, 0f));
         pg.imageMode(CENTER);
         icon = (icons.get("FRAME_TIME"))[0];
-        pg.image(icon, WIDTH / 2f, icon.height / 2f);
+        pg.image(icon, 0f, icon.height / 2f);
         pg.textSize(48);
+        pg.fill(#FFE2AD);
         pg.textAlign(CENTER, CENTER);
-        pg.text(String.format("%.0f", timer), WIDTH / 2f, 40);
-        pg.text(((winTeam() >= 0) ? "Win " + winSlime().getTeamName() + " ": "")
-          , WIDTH / 2f, HEIGHT / 2f);
+        pg.text(String.format("%.0f", timer), 0f, 40);
+        if(winTeamID() >= 0) {
+          icon = (icons.get("JUDGE_WIN"))[0];
+          PVector v;
+          v = new PVector(0f, HEIGHT / 2f);
+          pg.tint(64);
+          pg.image(icon, v.x + 4, v.y + 4);
+          pg.noTint();
+          pg.image(icon, v.x, v.y);
+          Team t = getWinTeam();
+          icon = (icons.get("SLIME_BIG"))[0];
+          for(int n = 0; n < t.size(); n++) {
+            v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .6f);
+            pg.tint(color(32));
+            pg.image(icon, v.x + 4, v.y + 4);
+            pg.tint(t.get(n).getColor());
+            pg.image(icon, v.x, v.y);
+          }
+        } else if(countSlime() == 0) {
+          icon = (icons.get("JUDGE_DRAW"))[0];
+          PVector v;
+          v = new PVector(0f, HEIGHT * .7f);
+          pg.tint(64);
+          pg.image(icon, v.x + 4, v.y + 4);
+          pg.noTint();
+          pg.image(icon, v.x, v.y);
+        }
       pgClose(pg);
       
       PImage slimeImage = icons.get("SLIME")[0];
@@ -128,7 +152,16 @@ class Manager {
     return count;
   }
   
-  int winTeam() {
+  Team getWinTeam() {
+    for(Team t: teams) {
+      if(t.getID() == winTeamID()) {
+        return t;
+      }
+    }
+    return null;
+  }
+  
+  int winTeamID() {
     int winteam = -1;
     for(Article a: objects) {
       if(a instanceof Slime) {

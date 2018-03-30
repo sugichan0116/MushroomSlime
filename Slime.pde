@@ -21,24 +21,25 @@ class Slime extends Article{
   private float shieldPlayTime;
   private final float shieldCycleTime = 0.3f;
   private float ineffectiveTime;
-  private final float ineffectiveCycleTime = .2f;
+  private final float ineffectiveCycleTime = .1f;
   private float awakeningTime;
   private final float awakeningRate = 2.0f;
   
   Slime() {
-    this(-1, "");
+    this(-1, new color[]{}, "");
   }
   
-  Slime(int team, String port) {
-    this(team, port, -1);
+  Slime(int team, color[] colors, String port) {
+    this(team, colors, port, -1);
   }
   
-  Slime(int team, String port, int controlID) {
+  Slime(int team, color[] colors, String port, int controlID) {
     r = new PVector(WIDTH / 2f, HEIGHT / 2f);
     PVector locate = (new PVector(1f, 1f).rotate(PI * (1f + .5f * team)));
     locate.x *= WIDTH;
     locate.y *= HEIGHT;
     r.add(locate.div(4f));
+    
     size = 64f;
     playTime = 0f; cycleTime = 0.9f;
     velocity = speed;
@@ -47,7 +48,6 @@ class Slime extends Article{
     initFrame = 0;
     energy = 0f;
     setInputPort(port);
-    tintColor = getRandomColor();
     gaugeImage = icons.get("GAUGE")[3];
     gaugeVisibleTime = 0f;
     isDead = isShield = false;
@@ -55,6 +55,12 @@ class Slime extends Article{
     shootCoolTime = 0f;
     ineffectiveTime = 0f;
     this.controlID = controlID;
+    setColor(colors);
+  }
+  
+  Slime setColor(color[] colors) {
+    tintColor = lerpColor(lerpColor(colors[team % colors.length], color(255), random(.5f)), color(128), random(.5f));
+    return this;
   }
   
   protected color getRandomColor() {

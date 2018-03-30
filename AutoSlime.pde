@@ -4,8 +4,8 @@ class AutoSlime extends Slime {
   private float aggressiveEnergy;
   private String mode;
   
-  AutoSlime(int team) {
-    super(team, "");
+  AutoSlime(int team, color[] colors) {
+    super(team, colors, "");
     movingTime = 0f;
     targetTime = random(4.0f) + .2f;
     aggressiveEnergy = random(8.0f);
