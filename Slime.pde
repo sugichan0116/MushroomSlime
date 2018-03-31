@@ -82,6 +82,9 @@ class Slime extends Article{
       pg.image(getImage(), i.x, i.y);
       pg.noTint();
       
+      pg.textAlign(CENTER, BOTTOM);
+      pg.text((this.getClass() == Slime.class) ? getTeamName() : "", 0f, size * -.5f);
+      
     pgClose(pg);
     DrawShield(pg, i);
     DrawGauge(pg);
@@ -167,7 +170,7 @@ class Slime extends Article{
   }
   
   String getTeamName() {
-    return inputPort + " " + ((controlID >= 0) ? controlID : "");
+    return ((controlID >= 0) ? (controlID + 1) + " P" : inputPort);
   }
   
   void setEating() {

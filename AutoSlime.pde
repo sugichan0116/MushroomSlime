@@ -43,7 +43,7 @@ class AutoSlime extends Slime {
   }
   
   String getTeamName() {
-    return "CPU" + team;
+    return "CPU" + (team + 1);
   }
   
   String getNature() {

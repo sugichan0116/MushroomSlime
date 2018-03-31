@@ -18,28 +18,32 @@ void Draw() {
 }
 
 void Update() {
-  //remove
-  for(int n = objects.size() - 1; n >= 0; n-- ) {
-    Article a = objects.get(n);
-    if(a.isRemove()) {
-      objects.remove(n);
-    }
-    else a.Update();
-  }
-  
-  //collide
-  for(int m = 0; m < objects.size() - 1; m++) {
-    for(int n = m + 1; n < objects.size(); n++) {
-      Article a = (objects.get(m)), b = (objects.get(n));
-      if(a.isCollide(b) && b.isCollide(a)) {
-        a.collide(b);
-        b.collide(a);
+  if(manager.is("FIGHT")) {
+    if(manager.is("MAIN")) {
+      //remove
+      for(int n = objects.size() - 1; n >= 0; n-- ) {
+        Article a = objects.get(n);
+        if(a.isRemove()) {
+          objects.remove(n);
+        }
+        else a.Update();
+      }
+      
+      //collide
+      for(int m = 0; m < objects.size() - 1; m++) {
+        for(int n = m + 1; n < objects.size(); n++) {
+          Article a = (objects.get(m)), b = (objects.get(n));
+          if(a.isCollide(b) && b.isCollide(a)) {
+            a.collide(b);
+            b.collide(a);
+          }
+        }
       }
     }
+    
+    //build
+    buildObjects();
   }
-  
-  //build
-  buildObjects();
   
   controlState.stateLog();
   keyState.Update();

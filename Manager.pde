@@ -1,16 +1,16 @@
 class Manager {
   String scene;
-  float timer, resultTime;
+  float timer, intervalTime;
   color[] colors;
   
   Manager() {
     scene = "MENU";
     colors = new color[]{#FF6262, #79F0ED, #FBFF1A, #52FF65};
+    intervalTime = 3f;
   }
   
   void restart() {
     timer = 0f;
-    resultTime = 3f;
     objects = new ArrayList<Article>();
     objects.add(new Slime(0, colors, "ARROWS"));
     objects.add(new Slime(0, colors, "CONTROLLER", 0));
@@ -22,13 +22,36 @@ class Manager {
     sounds.play("BGM_WATER");
   }
   
+  boolean is(String sceneKey) {
+    return scene.indexOf(sceneKey) != -1;
+  }
+  
   void Update() {
-    if(timer > 4f) scene = "FIGHT";
+    if(scene.startsWith("MENU")) {
+      intervalTime -= 1f / frameRate;
+      if(intervalTime <= 0f) scene = "FIGHT_RESTART";
+    }
     
-    timer += 1f / frameRate;
-    if(winTeamID() >= 0 || countSlime() == 0) resultTime -= 1f / frameRate;
-    if(isInput("START") || resultTime <= 0f) {
+    if(scene.startsWith("FIGHT_START")) {
+      intervalTime -= 1f / frameRate;
+      if(intervalTime <= 0f) scene = "FIGHT_MAIN";
+    }
+    if(scene.startsWith("FIGHT_MAIN")) {
+      if(winTeamID() >= 0) scene = "FIGHT_END_WIN";
+      if(countSlime() == 0) scene = "FIGHT_END_DRAW";
+      if(scene.indexOf("FIGHT_END") != -1) intervalTime = 3f;
+      timer += 1f / frameRate;
+    }
+    if(scene.startsWith("FIGHT_END")) {
+      intervalTime -= 1f / frameRate;
+      if(intervalTime <= 0f) {
+        scene = "FIGHT_RESTART";
+      }
+    }
+    if(scene.indexOf("FIGHT_RESTART") != -1 || isInput("START")) {
       restart();
+      intervalTime = 3f;
+      scene = "FIGHT_START";
     }
   }
   
@@ -48,7 +71,7 @@ class Manager {
       pg.image(icon, 0, 0);
     pgClose(pg);
     
-    if(scene == "MENU") {
+    if(scene.startsWith("MENU")) {
       pgOpen(pg, new PVector(WIDTH / 2f, HEIGHT * .6f));
         icon = (icons.get("FRAME_MENU"))[0];
         pg.imageMode(CENTER);
@@ -56,7 +79,7 @@ class Manager {
       pgClose(pg);
     }
     
-    if(scene == "FIGHT") {
+    if(scene.startsWith("FIGHT")) {
       pgOpen(pg, new PVector(WIDTH / 2f, 0f));
         pg.imageMode(CENTER);
         icon = (icons.get("FRAME_TIME"))[0];
@@ -67,7 +90,7 @@ class Manager {
         pg.text(String.format("%.0f", timer), -1, 40 - 1);
         pg.fill(#FFE2AD);
         pg.text(String.format("%.0f", timer), 0, 40);
-        if(winTeamID() >= 0) {
+        if(scene.endsWith("WIN")) {
           icon = (icons.get("JUDGE_WIN"))[0];
           PVector v;
           v = new PVector(0f, HEIGHT / 2f);
@@ -84,7 +107,7 @@ class Manager {
             pg.tint(t.get(n).getColor());
             pg.image(icon, v.x, v.y);
           }
-        } else if(countSlime() == 0) {
+        } else if(scene.endsWith("DRAW")) {
           icon = (icons.get("JUDGE_DRAW"))[0];
           PVector v;
           v = new PVector(0f, HEIGHT * .7f);
@@ -96,6 +119,7 @@ class Manager {
       pgClose(pg);
       
       PImage slimeImage = icons.get("SLIME")[0];
+      if(teams != null)
       for(int n = 0; n < teams.size(); n++) {
         Team team = teams.get(n);
         if(n * 2 - 1 <= teams.size() * 2) {
