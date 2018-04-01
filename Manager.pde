@@ -40,6 +40,7 @@ class Manager {
       if(winTeamID() >= 0) scene = "FIGHT_END_WIN";
       if(countSlime() == 0) scene = "FIGHT_END_DRAW";
       if(scene.indexOf("FIGHT_END") != -1) intervalTime = 3f;
+      if(isInput("START")) scene = "FIGHT_RESTART";
       timer += 1f / frameRate;
     }
     if(scene.startsWith("FIGHT_END")) {
@@ -48,7 +49,7 @@ class Manager {
         scene = "FIGHT_RESTART";
       }
     }
-    if(scene.indexOf("FIGHT_RESTART") != -1 || isInput("START")) {
+    if(scene.indexOf("FIGHT_RESTART") != -1) {
       restart();
       intervalTime = 3f;
       scene = "FIGHT_START";
