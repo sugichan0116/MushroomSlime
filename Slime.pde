@@ -291,9 +291,11 @@ class Slime extends Article{
     if(isEating == false) {
       for(int n = 0; n < 4; n++) {
         if(isInput(inputPort, getDirection(n))) {
-          v.add(unitVector(n).mult(velocity));
+          v.add(unitVector(n));
         }
       }
+      v.add(getInputDirection(inputPort));
+      v.normalize().mult(velocity);
     }
   }
   

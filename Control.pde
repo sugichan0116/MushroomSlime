@@ -151,6 +151,10 @@ public class ControlState
     return false;
   }
   
+  float getSlider(String direction) {
+    return getSlider("LEFT", direction) + getSlider("RIGHT", direction);
+  }
+  
   float getSlider(String name, String direction) {
     if(!isValidID(controlID)) return 0f;
     if(name == "LEFT") {

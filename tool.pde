@@ -170,6 +170,14 @@ boolean isInput(String port, String code) {
   return false;
 }
 
+PVector getInputDirection(String port) {
+  if(port == "CONTROLLER") {
+    return new PVector(controlState.getSlider("X"), controlState.getSlider("Y"));
+  }
+  
+  return new PVector();
+}
+
 int keyCode(char c) {
   return int(c);
 }
