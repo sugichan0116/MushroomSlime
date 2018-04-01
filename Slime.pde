@@ -295,6 +295,7 @@ class Slime extends Article{
         }
       }
       v.add(getInputDirection(inputPort));
+      if(v.mag() < 1f) v.mult(0f);
       v.normalize().mult(velocity);
     }
   }
