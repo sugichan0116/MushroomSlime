@@ -70,6 +70,8 @@ void setup() {
   icons.put("JUDGE_WIN", sliceImage("win.png", 72, 32, 3, 3));
   icons.put("JUDGE_DRAW", sliceImage("draw.png", 96, 32, 3, 3));
   icons.put("FRAME_MENU", sliceImage("titlelogo.png", 108, 72, 4, 4));
+  icons.put("FRAME_START", sliceImage("start.png", 96, 32, 4, 4));
+  icons.put("FRAME_WAITING", sliceImage("waiting.png", 17, 17, 4, 4));
   icons.put("FRAME_FRONT", sliceImage("grassland_d.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_TIME", sliceImage("signboard.png", 64, 32, 4, 3));
   icons.put("FRAME_BACK", sliceImage("grassland_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));

@@ -51,7 +51,7 @@ class Manager {
     }
     if(scene.indexOf("FIGHT_RESTART") != -1) {
       restart();
-      intervalTime = 3f;
+      intervalTime = 1f;
       scene = "FIGHT_START";
     }
   }
@@ -83,39 +83,51 @@ class Manager {
     if(scene.startsWith("FIGHT")) {
       pgOpen(pg, new PVector(WIDTH / 2f, 0f));
         pg.imageMode(CENTER);
-        icon = (icons.get("FRAME_TIME"))[0];
-        pg.image(icon, 0f, icon.height / 2f);
-        pg.textSize(48);
-        pg.textAlign(CENTER, CENTER);
-        pg.fill(#715012);
-        pg.text(String.format("%.0f", timer), -1, 40 - 1);
-        pg.fill(#FFE2AD);
-        pg.text(String.format("%.0f", timer), 0, 40);
-        if(scene.endsWith("WIN")) {
-          icon = (icons.get("JUDGE_WIN"))[0];
-          PVector v;
-          v = new PVector(0f, HEIGHT / 2f);
-          pg.tint(64);
-          pg.image(icon, v.x + 4, v.y + 4);
-          pg.noTint();
-          pg.image(icon, v.x, v.y);
-          Team t = getWinTeam();
-          icon = (icons.get("SLIME_BIG"))[0];
-          for(int n = 0; n < t.size(); n++) {
-            v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .6f);
-            pg.tint(color(32));
-            pg.image(icon, v.x + 2, v.y + 2);
-            pg.tint(t.get(n).getColor());
+        if(scene.endsWith("START")) {
+          PImage[] tiles = icons.get("FRAME_WAITING");
+          for(int i = 0; i < 3; i++) {
+            pg.image(tiles[mod(int((1f - intervalTime) * 8f) + i, (tiles.length - 1))], WIDTH * .1f * (i - 1), HEIGHT * .7f);
+          }
+          if(intervalTime < .5f) {
+            icon = (icons.get("FRAME_START"))[0];
+            pg.image(icon, 0f, HEIGHT * .7f);
+          }
+        } else {
+          icon = (icons.get("FRAME_TIME"))[0];
+          pg.image(icon, 0f, icon.height / 2f);
+          pg.textSize(48);
+          pg.textAlign(CENTER, CENTER);
+          pg.fill(#715012);
+          pg.text(String.format("%.0f", timer), -1, 40 - 1);
+          pg.fill(#FFE2AD);
+          pg.text(String.format("%.0f", timer), 0, 40);
+          
+          if(scene.endsWith("WIN")) {
+            icon = (icons.get("JUDGE_WIN"))[0];
+            PVector v;
+            v = new PVector(0f, HEIGHT / 2f);
+            pg.tint(64);
+            pg.image(icon, v.x + 4, v.y + 4);
+            pg.noTint();
+            pg.image(icon, v.x, v.y);
+            Team t = getWinTeam();
+            icon = (icons.get("SLIME_BIG"))[0];
+            for(int n = 0; n < t.size(); n++) {
+              v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .6f);
+              pg.tint(color(32));
+              pg.image(icon, v.x + 2, v.y + 2);
+              pg.tint(t.get(n).getColor());
+              pg.image(icon, v.x, v.y);
+            }
+          } else if(scene.endsWith("DRAW")) {
+            icon = (icons.get("JUDGE_DRAW"))[0];
+            PVector v;
+            v = new PVector(0f, HEIGHT * .7f);
+            pg.tint(64);
+            pg.image(icon, v.x + 4, v.y + 4);
+            pg.noTint();
             pg.image(icon, v.x, v.y);
           }
-        } else if(scene.endsWith("DRAW")) {
-          icon = (icons.get("JUDGE_DRAW"))[0];
-          PVector v;
-          v = new PVector(0f, HEIGHT * .7f);
-          pg.tint(64);
-          pg.image(icon, v.x + 4, v.y + 4);
-          pg.noTint();
-          pg.image(icon, v.x, v.y);
         }
       pgClose(pg);
       
