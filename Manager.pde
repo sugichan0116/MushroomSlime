@@ -35,6 +35,11 @@ class Manager {
     if(scene.startsWith("MENU")) {
       intervalTime -= 1f / frameRate;
       if(intervalTime <= 0f) scene = "FIGHT_RESTART";
+      if(mousePressed && (mouseButton == LEFT)) scene = "CONFIG";
+    }
+    if(is("CONFIG")) {
+      if(mousePressed && (mouseButton == RIGHT)) scene = "MENU";
+      
     }
     
     if(scene.startsWith("FIGHT_START")) {
@@ -54,7 +59,7 @@ class Manager {
         scene = "FIGHT_RESTART";
       }
     }
-    if(scene.indexOf("FIGHT_RESTART") != -1) {
+    if(is("FIGHT_RESTART")) {
       restart();
       intervalTime = 1f;
       scene = "FIGHT_START";
@@ -82,6 +87,13 @@ class Manager {
         icon = (icons.get("FRAME_MENU"))[0];
         pg.imageMode(CENTER);
         pg.image(icon, 0, 0);
+      pgClose(pg);
+    }
+    
+    if(is("CONFIG")) {
+      pgOpen(pg);
+        icon = (icons.get("FRAME_CREDIT"))[0];
+        pg.image(icon, 0f, 0f);
       pgClose(pg);
     }
     

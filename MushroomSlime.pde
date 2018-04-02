@@ -77,6 +77,7 @@ void setup() {
   icons.put("FRAME_FRONT", sliceImage("grassland_d.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_TIME", sliceImage("signboard.png", 64, 32, 4, 3));
   icons.put("FRAME_BACK", sliceImage("grassland_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));
+  icons.put("FRAME_CREDIT", sliceImage("credit.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   
   println("* layer setting...");
   layers = new HashMap<String, PGraphics>();
