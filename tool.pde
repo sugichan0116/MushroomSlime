@@ -49,8 +49,6 @@ PImage[] sliceImage(String name, int widthSize, int heightSize, int widthRate, i
 
 PImage[] resizeImages(PImage[] images, int widthRate, int heightRate) {
   for(int n = 0; n < images.length; n++) {
-    //* choose rendering type
-    //images[n].resize(int(images[n].width * widthRate), int(images[n].height * heightRate));
     images[n] = resizeImage(images[n], widthRate, heightRate);
   }
   return images;
@@ -172,7 +170,6 @@ boolean isInput(String port, String code) {
 
 PVector getInputDirection(String port) {
   if(port == "CONTROLLER") {
-    println("@ " + port + controlState.getSlider("X"));
     return new PVector(controlState.getSlider("X"), controlState.getSlider("Y"));
   }
   

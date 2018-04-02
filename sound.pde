@@ -16,7 +16,7 @@ class SoundData {
   }
   
   SoundData play(float master) {
-    if(isLoop) s.loop();
+    if(isLoop) {s.loop(); println("@@@");}
     else s.play();
     s.amp(volume * master);
     s.rate(rate);

@@ -45,7 +45,7 @@ void Update() {
     buildObjects();
   }
   
-  controlState.stateLog();
+  //controlState.stateLog();
   keyState.Update();
   
   manager.Update();

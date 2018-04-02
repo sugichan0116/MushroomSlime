@@ -45,8 +45,10 @@ void setup() {
   
   println("* sound loading...");
   sounds = new Sound(this);
-  sounds.put("BGM_WATER", sounds.create("water_land.mp3").isLoop(true));
+  sounds.put("BGM_WATER", sounds.create("water_land.mp3").isLoop(true).volume(.6f));
+  sounds.put("BGM_NIGHT", sounds.create("summernight.mp3").isLoop(true).volume(.6f));
   sounds.put("BGM_CRY", sounds.create("montanus_cry.mp3").isLoop(true));
+  sounds.put("TITLE", sounds.create("title.mp3"));
   sounds.put("EAT", sounds.create("eat.mp3"));
   sounds.put("SHOOT", sounds.create("shoot.mp3"));
   sounds.put("WALK", sounds.create("slime.mp3"));

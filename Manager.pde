@@ -4,9 +4,9 @@ class Manager {
   color[] colors;
   
   Manager() {
-    scene = "MENU";
+    scene = "SETUP";
     colors = new color[]{#FF6262, #79F0ED, #FBFF1A, #52FF65};
-    intervalTime = 3f;
+    intervalTime = 5f;
   }
   
   void restart() {
@@ -20,6 +20,7 @@ class Manager {
     objects.add(new AutoSlime(3, colors));
     teams = getTeams();
     sounds.play("BGM_WATER");
+    sounds.play("BGM_NIGHT");
   }
   
   boolean is(String sceneKey) {
@@ -27,6 +28,10 @@ class Manager {
   }
   
   void Update() {
+    if(scene.startsWith("SETUP")) {
+      scene = "MENU";
+      sounds.play("TITLE");
+    }
     if(scene.startsWith("MENU")) {
       intervalTime -= 1f / frameRate;
       if(intervalTime <= 0f) scene = "FIGHT_RESTART";
