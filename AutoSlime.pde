@@ -12,6 +12,10 @@ class AutoSlime extends Slime {
     String mode = "";
   }
   
+  Slime copy() {
+    return new AutoSlime(team, new color[]{}).setColor(tintColor);
+  }
+  
   void Move() {
     movingTime += 1f / frameRate;
     isMoving = true;

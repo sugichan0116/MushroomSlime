@@ -38,6 +38,18 @@ class Manager {
     return false;
   }
   
+  void connectCPU() {
+    if(mousePressed && !preMousePressed && keyState.getCode(CONTROL) && (mouseButton == LEFT)) {
+          println("~");
+      for(int team = 0; team < 4; team++) {
+        if(abs(width * .5 - mouseX) <= width * .4 && abs(height * (.1 * team + .35) - mouseY) <= HEIGHT * .05) {
+          println("~");
+          preset.add(new AutoSlime(team, colors));
+        }
+      }
+    }
+  }
+  
   void connectController() {
     final String code = "START";
     int team = (objects.size()) % 4; //TODO
@@ -96,6 +108,7 @@ class Manager {
           //resetController();
         }
         connectController();
+        connectCPU();
         selectTeamController();
       }
       if(is("HELP")) {
@@ -229,7 +242,7 @@ class Manager {
           }
           if(intervalTime < .5f) {
             icon = (icons.get("FRAME_START"))[0];
-            pg.image(icon, 0f, HEIGHT * .7f);
+            pg.image(icon, 0f, HEIGHT * .5f);
           }
         } else {
           icon = (icons.get("FRAME_TIME"))[0];
@@ -244,7 +257,7 @@ class Manager {
           if(scene.endsWith("WIN")) {
             icon = (icons.get("JUDGE_WIN"))[0];
             PVector v;
-            v = new PVector(0f, HEIGHT / 2f);
+            v = new PVector(0f, HEIGHT * .4f);
             pg.tint(64);
             pg.image(icon, v.x + 4, v.y + 4);
             pg.noTint();
@@ -252,7 +265,7 @@ class Manager {
             Team t = getWinTeam();
             icon = (icons.get("SLIME_BIG"))[0];
             for(int n = 0; n < t.size(); n++) {
-              v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .5f);
+              v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .6f);
               pg.tint(color(32));
               pg.image(icon, v.x + 2, v.y + 2);
               pg.tint(t.get(n).getColor());

@@ -1,6 +1,6 @@
 class Slime extends Article{
   private String inputPort;
-  private color tintColor;
+  protected color tintColor;
   protected int team;
   private int controlID;
   
