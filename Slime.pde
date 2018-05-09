@@ -58,8 +58,18 @@ class Slime extends Article{
     setColor(colors);
   }
   
+  Slime copy() {
+    return new Slime(team, new color[]{}, inputPort, controlID).setColor(tintColor);
+  }
+  
   Slime setColor(color[] colors) {
+    if(colors.length == 0) return this;
     tintColor = lerpColor(lerpColor(colors[team % colors.length], color(255), random(.5f)), color(128), random(.5f));
+    return this;
+  }
+  
+  Slime setColor(color _color) {
+    tintColor = _color;
     return this;
   }
   
@@ -69,6 +79,10 @@ class Slime extends Article{
   
   void setInputPort(String port) {
     inputPort = port;
+  }
+  
+  boolean isEqualController(String _port, int _id) {
+    return (inputPort == _port) && (controlID == _id);
   }
   
   void Draw() {
@@ -116,10 +130,29 @@ class Slime extends Article{
     pgClose(pg);
   }
   
+  Slime shiftTeam(int _team) {
+    team = _team;
+    return this;
+  }
+  
+  Slime validateTeam(int maxTeamID) {
+    team = mod(team, maxTeamID);
+    return this;
+  }
+  
+  void setControlID() {
+    controlState.setControlID(controlID);
+  }
+  
+  boolean isPressed(String code) {
+    setControlID();
+    return isInput(inputPort, code);
+  }
+  
   void Update() {
     super.Update();
     
-    controlState.setControlID(controlID);
+    setControlID();
     playTimeForAnime();
     Move();
     selectCommand();

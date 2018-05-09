@@ -2,22 +2,22 @@ class Manager {
   String scene;
   float timer, intervalTime;
   color[] colors;
+  ArrayList<Slime> preset;
+  boolean preMousePressed;
   
   Manager() {
     scene = "SETUP";
     colors = new color[]{#FF6262, #79F0ED, #FBFF1A, #52FF65};
     intervalTime = 5f;
+    resetController();
   }
   
   void restart() {
     timer = 0f;
     objects = new ArrayList<Article>();
-    objects.add(new Slime(0, colors, "ARROWS"));
-    objects.add(new Slime(0, colors, "CONTROLLER", 0));
-    objects.add(new Slime(0, colors, "CONTROLLER", 1));
-    objects.add(new Slime(1, colors, "CONTROLLER", 2));
-    objects.add(new Slime(2, colors, "CONTROLLER", 3));
-    objects.add(new AutoSlime(3, colors));
+    for(Slime s: preset) {
+      objects.add(s.copy().setColor(colors));
+    }
     teams = getTeams();
     sounds.play("BGM_WATER");
     sounds.play("BGM_NIGHT");
@@ -25,6 +25,53 @@ class Manager {
   
   boolean is(String sceneKey) {
     return scene.indexOf(sceneKey) != -1;
+  }
+  
+  void resetController() {
+    preset = new ArrayList<Slime>();
+  }
+  
+  boolean isCheckEqualController(String _port, int _id) {
+    for(Slime s: preset) {
+      if(s.isEqualController(_port, _id)) return true;
+    }
+    return false;
+  }
+  
+  void connectController() {
+    final String code = "START";
+    int team = (objects.size()) % 4; //TODO
+    String[] ports = {"ARROWS", "KEYBOARD", "CONTROLLER"};
+    
+    for(String port : ports) {
+      if(port == "CONTROLLER") {
+        int id = 0;
+        while(controlState.isValidID(id)) {
+          controlState.setControlID(id);
+          if(isInput(port, code) && isCheckEqualController(port, id) == false) {
+            preset.add(new Slime(team, colors, port, id));
+          }
+          id++;
+        }
+      } else if(isInput(port, code) && isCheckEqualController(port, -1) == false) {
+        preset.add(new Slime(team, colors, port));
+      }
+    }
+  }
+  
+  void selectTeamController() {
+    for(Slime s: preset) {
+      if(s.isPressed("A")) {
+        s.shiftTeam(0);
+      } else if(s.isPressed("B")) {
+        s.shiftTeam(1);
+      } else if(s.isPressed("X")) {
+        s.shiftTeam(2);
+      } else if(s.isPressed("Y")) {
+        s.shiftTeam(3);
+      }
+      //s.validateTeam(4);
+    }
   }
   
   void Update() {
@@ -35,35 +82,70 @@ class Manager {
     if(scene.startsWith("MENU")) {
       intervalTime -= 1f / frameRate;
       if(intervalTime <= 0f) scene = "FIGHT_RESTART";
-      if(mousePressed && (mouseButton == LEFT)) scene = "CONFIG";
-    }
-    if(is("CONFIG")) {
-      if(mousePressed && (mouseButton == RIGHT)) scene = "MENU";
-      
+      if(mousePressed && (mouseButton == LEFT)) scene = "META_CONFIG";
     }
     
-    if(scene.startsWith("FIGHT_START")) {
-      intervalTime -= 1f / frameRate;
-      if(intervalTime <= 0f) scene = "FIGHT_MAIN";
+    if(is("META")) {
+      String pre, next;
+      pre = next = "META";
+      if(is("CONFIG")) {
+        pre += "_CREDIT";
+        next += "_HELP_CON";
+        if(is("CONFIG") && !is("RESET")) {
+          scene += "_RESET";
+          //resetController();
+        }
+        connectController();
+        selectTeamController();
+      }
+      if(is("HELP")) {
+        if(is("CON")) {
+          pre += "_CONFIG";
+          next += "_HELP_KEY";
+        }
+        if(is("KEY")) {
+          pre += "_HELP_CON";
+          next += "_CREDIT";
+        }
+      }
+      if(is("CREDIT")) {
+        pre += "_HELP_KEY";
+        next += "_CONFIG";
+      }
+      if(mousePressed && !preMousePressed && (mouseButton == LEFT)) {
+        if(mouseX < width * .1) scene = pre;
+        if(mouseX > width * .9) scene = next;
+      }
+      if(mousePressed && (mouseButton == RIGHT)) scene = "FIGHT_RESTART";
     }
-    if(scene.startsWith("FIGHT_MAIN")) {
-      if(winTeamID() >= 0) scene = "FIGHT_END_WIN";
-      if(countSlime() == 0) scene = "FIGHT_END_DRAW";
-      if(scene.indexOf("FIGHT_END") != -1) intervalTime = 3f;
-      if(isInput("START")) scene = "FIGHT_RESTART";
-      timer += 1f / frameRate;
-    }
-    if(scene.startsWith("FIGHT_END")) {
-      intervalTime -= 1f / frameRate;
-      if(intervalTime <= 0f) {
-        scene = "FIGHT_RESTART";
+    
+    if(is("FIGHT")) {
+      if(is("START")) {
+        intervalTime -= 1f / frameRate;
+        if(intervalTime <= 0f) scene = "FIGHT_MAIN";
+        if(mousePressed && (mouseButton == LEFT)) scene = "META_CONFIG";
+      }
+      if(is("MAIN")) {
+        if(winTeamID() >= 0) scene = "FIGHT_END_WIN";
+        if(countSlime() == 0) scene = "FIGHT_END_DRAW";
+        if(is("END")) intervalTime = 3f;
+        if(isInput("START")) scene = "FIGHT_RESTART";
+        timer += 1f / frameRate;
+      }
+      if(is("END")) {
+        intervalTime -= 1f / frameRate;
+        if(intervalTime <= 0f) {
+          scene = "FIGHT_RESTART";
+        }
+      }
+      if(is("RESTART")) {
+        restart();
+        intervalTime = 1f;
+        scene = "FIGHT_START";
       }
     }
-    if(is("FIGHT_RESTART")) {
-      restart();
-      intervalTime = 1f;
-      scene = "FIGHT_START";
-    }
+    
+    preMousePressed = mousePressed;
   }
   
   void DrawSystem() {
@@ -83,18 +165,58 @@ class Manager {
     pgClose(pg);
     
     if(scene.startsWith("MENU")) {
-      pgOpen(pg, new PVector(WIDTH / 2f, HEIGHT * .6f));
+      pgOpen(pg, new PVector(WIDTH / 2f, HEIGHT * .5f));
         icon = (icons.get("FRAME_MENU"))[0];
-        pg.imageMode(CENTER);
         pg.image(icon, 0, 0);
       pgClose(pg);
     }
     
-    if(is("CONFIG")) {
-      pgOpen(pg);
-        icon = (icons.get("FRAME_CREDIT"))[0];
-        pg.image(icon, 0f, 0f);
+    if(is("META")) {
+      pgOpen(pg, new PVector(WIDTH / 2f, 0f));
+        icon = (icons.get("FRAME_SHIFT"))[0];
+        pg.image(icon, 0f, HEIGHT * .5f);
       pgClose(pg);
+      
+      if(is("CONFIG")) {
+        pgOpen(pg, new PVector(WIDTH / 2f, 0f));
+          icon = (icons.get("FRAME_CONFIG"))[0];
+          pg.image(icon, 0, HEIGHT * .15f);
+          icon = (icons.get("FRAME_CONFIG_JOIN"))[0];
+          pg.image(icon, 0, HEIGHT * .7f + icon.height);
+          for(int i = 0; i < 4; i++) {
+            pg.fill(colors[i], 64);
+            pg.rect(WIDTH * -.4, HEIGHT * (.1 * i + .3), WIDTH * .8, HEIGHT * .1);
+          }
+          for(int i = 0, n = preset.size(); i < n; i++) {
+            int team = (preset.get(i)).team;
+            float rate = (n == 1) ? 0 : map(i, 0, n - 1, -1, 1) * constrain(n * .08, 0f, .3f);
+            //pg.text("" + team + "," + rate, WIDTH * rate, 100 + HEIGHT * 0.2 * team);
+            icon = (icons.get("SLIME_RIGHT"))[0];
+            pg.tint(colors[team]);
+            pg.image(icon, WIDTH * rate, HEIGHT * (.1 * team + .3) + icon.height / 2f);
+            //(preset.get(i)).Draw();
+          }
+        pgClose(pg);
+      }
+      
+      if(is("HELP")) {
+        if(is("CON")) {
+          icon = (icons.get("FRAME_HELP_CON"))[0];
+        }
+        if(is("KEY")) {
+          icon = (icons.get("FRAME_HELP_KEY"))[0];
+        }
+        pgOpen(pg);
+          pg.image(icon, 0f, 0f);
+        pgClose(pg);
+      }
+      
+      if(is("CREDIT")) {
+        pgOpen(pg);
+          icon = (icons.get("FRAME_CREDIT"))[0];
+          pg.image(icon, 0f, 0f);
+        pgClose(pg);
+      }
     }
     
     if(scene.startsWith("FIGHT")) {
@@ -130,7 +252,7 @@ class Manager {
             Team t = getWinTeam();
             icon = (icons.get("SLIME_BIG"))[0];
             for(int n = 0; n < t.size(); n++) {
-              v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .6f);
+              v = new PVector(icon.width * (float(n) - t.size() / 2f + .5f), HEIGHT * .5f);
               pg.tint(color(32));
               pg.image(icon, v.x + 2, v.y + 2);
               pg.tint(t.get(n).getColor());
@@ -139,7 +261,7 @@ class Manager {
           } else if(scene.endsWith("DRAW")) {
             icon = (icons.get("JUDGE_DRAW"))[0];
             PVector v;
-            v = new PVector(0f, HEIGHT * .7f);
+            v = new PVector(0f, HEIGHT * .5f);
             pg.tint(64);
             pg.image(icon, v.x + 4, v.y + 4);
             pg.noTint();
