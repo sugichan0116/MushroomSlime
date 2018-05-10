@@ -178,15 +178,18 @@ class Manager {
     pgClose(pg);
     
     if(scene.startsWith("MENU")) {
-      pgOpen(pg, new PVector(WIDTH / 2f, HEIGHT * .5f));
+      pgOpen(pg, new PVector(WIDTH / 2f, HEIGHT * .4f));
         icon = (icons.get("FRAME_MENU"))[0];
         pg.image(icon, 0, 0);
+        icon = (icons.get("FRAME_CLICK"))[0];
+        pg.image(icon, 0, HEIGHT * .3f);
       pgClose(pg);
     }
     
     if(is("META")) {
       pgOpen(pg, new PVector(WIDTH / 2f, 0f));
         icon = (icons.get("FRAME_SHIFT"))[0];
+        pg.scale(1f + sin(frameCount / 30f) * .05f);
         pg.image(icon, 0f, HEIGHT * .5f);
       pgClose(pg);
       
@@ -196,17 +199,32 @@ class Manager {
           pg.image(icon, 0, HEIGHT * .15f);
           icon = (icons.get("FRAME_CONFIG_JOIN"))[0];
           pg.image(icon, 0, HEIGHT * .7f + icon.height);
+          icon = (icons.get("FRAME_CPU"))[0];
+          pg.image(icon, WIDTH * -.3, HEIGHT * .8f);
+          icon = (icons.get("FRAME_DLETE"))[0];
+          pg.image(icon, WIDTH * .3, HEIGHT * .8f);
           for(int i = 0; i < 4; i++) {
             pg.fill(colors[i], 64);
-            pg.rect(WIDTH * -.4, HEIGHT * (.1 * i + .3), WIDTH * .8, HEIGHT * .1);
+            float y = HEIGHT * (.1 * i + .3);
+            icon = (icons.get("BUTTON"))[i];
+            for(float n = 0; n < 5; n++) {
+              float x = WIDTH * -.3 + (n * WIDTH * .1 + frameCount * 2f) % (WIDTH * .6f);
+              pg.tint(colors[i], WIDTH * .3 - abs(x));
+              pg.image(icon, x, y + HEIGHT * .05);
+            }
+            pg.noTint();
+            pg.rect(WIDTH * -.4, y, WIDTH * .8, HEIGHT * .1);
           }
           for(int i = 0, n = preset.size(); i < n; i++) {
             int team = (preset.get(i)).team;
             float rate = (n == 1) ? 0 : map(i, 0, n - 1, -1, 1) * constrain(n * .08, 0f, .3f);
-            //pg.text("" + team + "," + rate, WIDTH * rate, 100 + HEIGHT * 0.2 * team);
+            float y = HEIGHT * (0.1 * team + .3);
+            pg.fill(255);
+            pg.textAlign(CENTER, TOP);
+            pg.text((preset.get(i)).getTeamName(), WIDTH * rate, y);
             icon = (icons.get("SLIME_RIGHT"))[0];
             pg.tint(colors[team]);
-            pg.image(icon, WIDTH * rate, HEIGHT * (.1 * team + .3) + icon.height / 2f);
+            pg.image(icon, WIDTH * rate, y + icon.height / 2f);
             //(preset.get(i)).Draw();
           }
         pgClose(pg);
@@ -244,6 +262,8 @@ class Manager {
             icon = (icons.get("FRAME_START"))[0];
             pg.image(icon, 0f, HEIGHT * .5f);
           }
+          icon = (icons.get("FRAME_CLICK"))[0];
+          pg.image(icon, 0, HEIGHT * .9f);
         } else {
           icon = (icons.get("FRAME_TIME"))[0];
           pg.image(icon, 0f, icon.height / 2f);

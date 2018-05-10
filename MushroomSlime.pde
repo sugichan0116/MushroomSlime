@@ -71,6 +71,7 @@ void setup() {
   icons.put("GAUGE", sliceImage("mushroom.png", 16, 16));
   icons.put("JUDGE_WIN", sliceImage("win.png", 72, 32, 3, 3));
   icons.put("JUDGE_DRAW", sliceImage("draw.png", 96, 32, 3, 3));
+  icons.put("BUTTON", sliceImage("button.png", 32, 32, 1, 1));
   icons.put("FRAME_MENU", sliceImage("titlelogo.png", 108, 72, 4, 4));
   icons.put("FRAME_START", sliceImage("start.png", 96, 32, 4, 4));
   icons.put("FRAME_WAITING", sliceImage("waiting.png", 17, 17, 4, 4));
@@ -83,6 +84,9 @@ void setup() {
   icons.put("FRAME_CREDIT", sliceImage("credit.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_HELP_KEY", sliceImage("help_k.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_HELP_CON", sliceImage("help_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));
+  icons.put("FRAME_CPU", sliceImage("cpu.png", 63, 23, 4, 4));
+  icons.put("FRAME_CLICK", sliceImage("click.png", 101, 17, 4, 4));
+  icons.put("FRAME_DELETE", sliceImage("delete.png", 58, 21, 4, 4));
   
   println("* layer setting...");
   layers = new HashMap<String, PGraphics>();
