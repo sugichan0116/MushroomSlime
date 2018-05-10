@@ -86,7 +86,8 @@ void setup() {
   icons.put("FRAME_HELP_CON", sliceImage("help_c.png", WIDTH / 4, HEIGHT / 4, 4, 4));
   icons.put("FRAME_CPU", sliceImage("cpu.png", 63, 23, 4, 4));
   icons.put("FRAME_CLICK", sliceImage("click.png", 101, 17, 4, 4));
-  icons.put("FRAME_DELETE", sliceImage("delete.png", 58, 21, 4, 4));
+  icons.put("FRAME_DELETE", sliceImage("delete.png", 63, 22, 4, 4));
+  icons.put("FRAME_RETURN", sliceImage("back.png", 67, 29, 3, 3));
   
   println("* layer setting...");
   layers = new HashMap<String, PGraphics>();

@@ -27,8 +27,21 @@ class Manager {
     return scene.indexOf(sceneKey) != -1;
   }
   
+  void setDefaultController() {
+    preset.add(new Slime(0, colors, "KEYBOARD"));
+    preset.add(new AutoSlime(1, colors));
+    preset.add(new AutoSlime(2, colors));
+    preset.add(new AutoSlime(3, colors));
+  }
+  
   void resetController() {
     preset = new ArrayList<Slime>();
+  }
+  
+  void checkResetController() {
+    if(mousePressed && !preMousePressed && keyState.getCode(ALT) && (mouseButton == LEFT)) {
+      resetController();
+    }
   }
   
   boolean isCheckEqualController(String _port, int _id) {
@@ -93,7 +106,10 @@ class Manager {
     }
     if(scene.startsWith("MENU")) {
       intervalTime -= 1f / frameRate;
-      if(intervalTime <= 0f) scene = "FIGHT_RESTART";
+      if(intervalTime <= 0f) {
+        setDefaultController();
+        scene = "FIGHT_RESTART";
+      }
       if(mousePressed && (mouseButton == LEFT)) scene = "META_CONFIG";
     }
     
@@ -107,6 +123,7 @@ class Manager {
           scene += "_RESET";
           //resetController();
         }
+        checkResetController();
         connectController();
         connectCPU();
         selectTeamController();
@@ -133,7 +150,7 @@ class Manager {
     }
     
     if(is("FIGHT")) {
-      if(is("START")) {
+      if(is("_START")) {
         intervalTime -= 1f / frameRate;
         if(intervalTime <= 0f) scene = "FIGHT_MAIN";
         if(mousePressed && (mouseButton == LEFT)) scene = "META_CONFIG";
@@ -153,7 +170,7 @@ class Manager {
       }
       if(is("RESTART")) {
         restart();
-        intervalTime = 1f;
+        intervalTime = 3f;
         scene = "FIGHT_START";
       }
     }
@@ -200,9 +217,11 @@ class Manager {
           icon = (icons.get("FRAME_CONFIG_JOIN"))[0];
           pg.image(icon, 0, HEIGHT * .7f + icon.height);
           icon = (icons.get("FRAME_CPU"))[0];
-          pg.image(icon, WIDTH * -.3, HEIGHT * .8f);
-          icon = (icons.get("FRAME_DLETE"))[0];
-          pg.image(icon, WIDTH * .3, HEIGHT * .8f);
+          pg.image(icon, WIDTH * -.3, HEIGHT * .9f);
+          icon = (icons.get("FRAME_DELETE"))[0];
+          pg.image(icon, WIDTH * .3, HEIGHT * .9f);
+          icon = (icons.get("FRAME_RETURN"))[0];
+          pg.image(icon, WIDTH * -.35, HEIGHT * .12f);
           for(int i = 0; i < 4; i++) {
             pg.fill(colors[i], 64);
             float y = HEIGHT * (.1 * i + .3);
